@@ -1,0 +1,36 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/homebrew/include/**",
+                "/opt/homebrew/include/",
+                "/opt/homebrew/include/SDL2/",
+                "/opt/homebrew/include/SDL2/**"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64"
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include/",
+                "/usr/include/**",
+                "/usr/include/SDL2",
+                "/usr/include/SDL2**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cppStandard": "c++98",
+            "intelliSenseMode": "linux-gcc-arm64"
+        }
+    ],
+    "version": 4
+}
