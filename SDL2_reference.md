@@ -1,21 +1,31 @@
 
-# video - 35:31
+# video - 58:06
+
+# Tables
+
+- [`0. Execution`](#0-execution)
+- [`1. SDL2 basic struct`](#1-sdl2-basic-struct)
+- [`2. SDL2 library functions`](#2-sdl2-library-functions)
+    - [`I. Functions about initialization`](#i-functions-about-initialization)
+    - [`II. Functions about user input (Event)`](#ii-functions-about-user-input-event)
+    - [`III. Functions about utility`](#iii-functions-about-utility)
+- [`?. Reference`](#reference)
 
 ## 0. Execution
-Replace `{$FileName}`
+Replace `${FileName}`
 
 
 - Mac os X
 ```bash
-gcc {$FileName}.c -g -o {$FileName} -I /opt/homebrew/include -L /opt/homebrew/lib
+gcc {$FileName}.c -g -o {$FileName} -I /opt/homebrew/include -L /opt/homebrew/lib/ -lSDL2   
 ```
 ```bash
-g++ {$FileName}.c -g -o {$FileName} -I /opt/homebrew/include -L /opt/homebrew/lib
+g++ {$FileName}.c -g -o {$FileName} -I /opt/homebrew/include -L /opt/homebrew/lib/ -lSDL2   
 ```
 
 - Linux
 ```bash
-gcc {$FileName}.c -g -o {$FileName} -lSDL2
+gcc ${FileName}.c -g -o ${FileName} -lSDL2
 ```
 
 ---
@@ -249,7 +259,7 @@ typedef struct SDL_KeyboardEvent
 ```
 
 ---
-- `SDL_Scancode`, `FILE: ` : The SDL keyboard scancode representation.
+- `SDL_Scancode`, `FILE: SDL_scancode.h` : The SDL keyboard scancode representation.
 ```c
 /**
  *  \brief The SDL keyboard scancode representation.
@@ -631,6 +641,41 @@ typedef enum
 ```
 
 ---
+- `SDL_Surface`, `FILE: SDL_surface.h` : A collection of pixels used in software blitting.
+```c
+/**
+ * \brief A collection of pixels used in software blitting.
+ *
+ * \note  This structure should be treated as read-only, except for \c pixels,
+ *        which, if not NULL, contains the raw pixel data for the surface.
+ */
+typedef struct SDL_Surface
+{
+    Uint32 flags;               /**< Read-only */
+    SDL_PixelFormat *format;    /**< Read-only */
+    int w, h;                   /**< Read-only */
+    int pitch;                  /**< Read-only */
+    void *pixels;               /**< Read-write */
+
+    /** Application data associated with the surface */
+    void *userdata;             /**< Read-write */
+
+    /** information needed for surfaces requiring locks */
+    int locked;                 /**< Read-only */
+    void *lock_data;            /**< Read-only */
+
+    /** clipping information */
+    SDL_Rect clip_rect;         /**< Read-only */
+
+    /** info for fast blit mapping to other surfaces */
+    struct SDL_BlitMap *map;    /**< Private */
+
+    /** Reference count -- used when freeing surface */
+    int refcount;               /**< Read-mostly */
+} SDL_Surface;
+```
+
+---
 - `SDL_bool`, `FILE: SDL_stdinc.h`
 ```c
 #ifdef __CC_ARM
@@ -781,6 +826,7 @@ extern DECLSPEC int SDLCALL SDL_QueryTexture(
 
 
 ---
+
 ### [`II. Functions about user input (Event)`]()
 - `int SDL_PollEvent(SDL_Event *event)` , `FILE: SDL_events.h` : Polls for currently pending events. Events are stored at `Queue`
 ```c
@@ -795,8 +841,131 @@ extern DECLSPEC int SDLCALL SDL_QueryTexture(
 extern DECLSPEC int SDLCALL SDL_PollEvent(SDL_Event * event);
 ```
 
----
-
-
 
 ---
+### [`III. Functions about utility`]()
+
+- `SDL_bool SDL_HasIntersection(const SDL_Rect * A, const SDL_Rect * B)`, `FILE: SDL_rect.h` : Determine whether two rectangles intersect.
+```c
+/**
+ *  \brief Determine whether two rectangles intersect.
+ *
+ *  \return SDL_TRUE if there is an intersection, SDL_FALSE otherwise.
+ */
+extern DECLSPEC SDL_bool SDLCALL SDL_HasIntersection(
+    const SDL_Rect * A, const SDL_Rect * B
+);
+```
+
+---
+- `char SDL_itoa(int value, char *str, int radix)`, `FILE: SDL_stdinc.h` : Convert integer to string with `radix, (진수, 밑)`.
+- `int SDL_atoi(const char *str)`, `FILE: SDL_stdinc.h` : Convert string to integer.
+```c
+extern DECLSPEC char *SDLCALL SDL_itoa(int value, char *str, int radix);
+extern DECLSPEC int SDLCALL SDL_atoi(const char *str);
+```
+
+---
+- `SDL_Surface *SDL_CreateRGBSurface(Uint32 flags, int width, int height, int depth, Uint32 Rmask, Uint32 Gmask, Uint32 Bmask, Uint32 Amask)`, `FILE: SDL_surface.h` : Allocate and free an RGB surface.
+```c
+/**
+ *  Allocate and free an RGB surface.
+ *
+ *  If the depth is 4 or 8 bits, an empty palette is allocated for the surface.
+ *  If the depth is greater than 8 bits, the pixel format is set using the
+ *  flags '[RGB]mask'.
+ *
+ *  If the function runs out of memory, it will return NULL.
+ *
+ *  \param flags The \c flags are obsolete and should be set to 0.
+ *  \param width The width in pixels of the surface to create.
+ *  \param height The height in pixels of the surface to create.
+ *  \param depth The depth in bits of the surface to create.
+ *  \param Rmask The red mask of the surface to create.
+ *  \param Gmask The green mask of the surface to create.
+ *  \param Bmask The blue mask of the surface to create.
+ *  \param Amask The alpha mask of the surface to create.
+ */
+extern DECLSPEC SDL_Surface *SDLCALL SDL_CreateRGBSurface(
+    Uint32 flags, int width, int height, int depth, 
+    Uint32 Rmask, Uint32 Gmask, Uint32 Bmask, Uint32 Amask
+);
+```
+- `void SDL_FreeSurface(SDL_Surface * surface)`, `FILE: SDL_surface.h` : Free an RGB surface.
+```c
+extern DECLSPEC void SDLCALL SDL_FreeSurface(SDL_Surface * surface);
+```
+---
+
+- `void SDL_DestroyTexture(SDL_Texture * texture)`, `FILE: SDL_render.h` : Destroy the specified texture.
+```c
+/**
+ *  \brief Destroy the specified texture.
+ *
+ *  \sa SDL_CreateTexture()
+ *  \sa SDL_CreateTextureFromSurface()
+ */
+extern DECLSPEC void SDLCALL SDL_DestroyTexture(SDL_Texture * texture);
+```
+
+- `SDL_Surface *TTF_RenderText_Solid(TTF_Font *font, const char *text, SDL_Color fg)`, `FILE: SDL_ttf.h` : Create an 8-bit palettized surface and render the given text at fast quality with the given font and color.
+```c
+/* Create an 8-bit palettized surface and render the given text at
+   fast quality with the given font and color.  The 0 pixel is the
+   colorkey, giving a transparent background, and the 1 pixel is set
+   to the text color.
+   This function returns the new surface, or NULL if there was an error.
+*/
+extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderText_Solid(
+    TTF_Font *font, const char *text, SDL_Color fg
+);
+```
+
+- `SDL_Texture *SDL_CreateTextureFromSurface(SDL_Renderer * renderer, SDL_Surface * surface)`, `FILE: SDL_render.h` : Create a texture from an existing surface.
+```c
+/**
+ *  \brief Create a texture from an existing surface.
+ *
+ *  \param renderer The renderer.
+ *  \param surface The surface containing pixel data used to fill the texture.
+ *
+ *  \return The created texture is returned, or NULL on error.
+ *
+ *  \note The surface is not modified or freed by this function.
+ *
+ *  \sa SDL_QueryTexture()
+ *  \sa SDL_DestroyTexture()
+ */
+extern DECLSPEC SDL_Texture * SDLCALL SDL_CreateTextureFromSurface(
+    SDL_Renderer * renderer, SDL_Surface * surface
+);
+```
+
+---
+- `int SDL_RenderCopy(SDL_Renderer * renderer, SDL_Texture * texture, const SDL_Rect * srcrect, const SDL_Rect * dstrect)`, `FILE: SDL_render.h` : Copy a portion of the texture to the current rendering target.
+```c
+/**
+ *  \brief Copy a portion of the texture to the current rendering target.
+ *
+ *  \param renderer The renderer which should copy parts of a texture.
+ *  \param texture The source texture.
+ *  \param srcrect   A pointer to the source rectangle, or NULL for the entire
+ *                   texture.
+ *  \param dstrect   A pointer to the destination rectangle, or NULL for the
+ *                   entire rendering target.
+ *
+ *  \return 0 on success, or -1 on error
+ */
+extern DECLSPEC int SDLCALL SDL_RenderCopy(
+    SDL_Renderer * renderer, SDL_Texture * texture, const SDL_Rect * srcrect, const SDL_Rect * dstrect
+);
+```
+
+
+---
+
+### [`?. Reference`]()
+
+- [`SDL WiKi`](https://wiki.libsdl.org/SDL2/FrontPage)
+- [`OpenSyobonAction`](https://github.com/akemin-dayo/OpenSyobonAction) : 고양이 마리오 with `cpp`
+- [`syobon`](https://github.com/weimzh/syobon) : OpenSyobon-M - SDL-based cross-platform port of Syobon Action
