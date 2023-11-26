@@ -1,7 +1,5 @@
 
-# video - 58:06
-
-# Tables
+# Reference table
 
 - [`0. Execution`](#0-execution)
 - [`1. SDL2 basic struct`](#1-sdl2-basic-struct)
@@ -12,7 +10,7 @@
 - [`?. Reference`](#reference)
 
 ## 0. Execution
-Replace `${FileName}`
+Replace `${FileName}` to your `file`
 
 
 - Mac os X
@@ -967,5 +965,6 @@ extern DECLSPEC int SDLCALL SDL_RenderCopy(
 ### [`?. Reference`]()
 
 - [`SDL WiKi`](https://wiki.libsdl.org/SDL2/FrontPage)
+- [`Lazy Foo' Productions`](https://lazyfoo.net/tutorials/SDL/index.php)
 - [`OpenSyobonAction`](https://github.com/akemin-dayo/OpenSyobonAction) : 고양이 마리오 with `cpp`
 - [`syobon`](https://github.com/weimzh/syobon) : OpenSyobon-M - SDL-based cross-platform port of Syobon Action
