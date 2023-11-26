@@ -12,7 +12,7 @@
             "args": [],
             "cwd": "${fileDirname}",
             "internalConsoleOptions": "neverOpen",
-            "preLaunchTask": "Build-current-file"
+            "preLaunchTask": "Build-current-file-Mac"
         },
         {
             "name": "(gdb - Linux) Launch",
@@ -39,7 +39,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Build-current-file",
+            "preLaunchTask": "Build-current-file-linux",
             "miDebuggerArgs": "-q -ex quit; wait() { fg >/dev/null; }; /bin/gdb -q --interpreter=mi"
         }
     ]
