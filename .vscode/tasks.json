@@ -4,14 +4,15 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-            "label": "build-current-file",
+            "label": "Build-current-file",
             "type": "shell",
             "command": "gcc",
             "args": [
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-lSDL2"
             ],
             "group": {
                 "kind": "build",
