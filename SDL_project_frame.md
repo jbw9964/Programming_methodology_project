@@ -27,7 +27,7 @@
         - 적
         - 수명 하트
         - 아이템
-    - SDL 라이브러리 공부 : [`Lazy Foo' Productions`](https://lazyfoo.net/tutorials/SDL/index.php), [WIKI DOCS](https://wikidocs.net/book/6636)
+    - SDL 라이브러리 공부 : [`Lazy Foo' Productions`](https://lazyfoo.net/tutorials/SDL/index.php), [`WIKI DOCS`](https://wikidocs.net/book/6636)
     - 게임 규칙 정하기 (가능하면)
 
 
