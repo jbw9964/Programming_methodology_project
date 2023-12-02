@@ -1,5 +1,6 @@
 # Private
-test/*
+# test/*
+practice/
 
 # Prerequisites
 *.d
