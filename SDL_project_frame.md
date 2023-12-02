@@ -31,3 +31,7 @@
     - 게임 규칙 정하기 (가능하면)
 
 
+## 성과
+- 준상
+    - 2D 맵에서 3D 처럼 보이게 하는 방법(?) : [`RayCasting tutorial`](https://github.com/365kim/raycasting_tutorial)
+    - 맵 구현 방법 + 테스트 코드 제작
