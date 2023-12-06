@@ -21,10 +21,15 @@
 
 
 // <GameObject/Player.h>
-    # define MAX_SPEED_X    150              // maximum speed that player can have
-    # define MAX_SPEED_Y    300              // maximum speed that player can have
+    # define MAX_SPEED_X    300              // maximum speed that player can have
+    # define MAX_SPEED_Y    600              // maximum speed that player can have
 
     # define NUM_OF_PLAYER_STATE    3       // maximum state that player can have (Normal, Jump, Run)
+
+    # define KEY_UP     SDL_SCANCODE_UP     // a `SDL_Scancode` that represent `UP` keyboard direction
+    # define KEY_DOWN   SDL_SCANCODE_DOWN   // a `SDL_Scancode` that represent `DOWN` keyboard direction
+    # define KEY_LEFT   SDL_SCANCODE_LEFT   // a `SDL_Scancode` that represent `LEFT` keyboard direction
+    # define KEY_RIGHT  SDL_SCANCODE_RIGHT  // a `SDL_Scancode` that represent `RIGHT` keyboard direction
 
     # define UNIT_TIME_STEP         (1 / 60.)   // time step to calculate position (60 FPS)
 
