@@ -11,8 +11,9 @@ SDL_Texture *Load_Texture(char *path, SDL_Renderer *render, int *w, int *h)
     {
         // show error
         fprintf(
-            stderr, "%s%s[Error] Render must be initialized. Failed to load texture.%s\n", 
-            ANSI_BOLD, ANSI_RED, ANSI_RESET
+            stderr, "%s%s[Error] Render must be initialized. Failed to load texture.%s\n%s:%d\n", 
+            ANSI_BOLD, ANSI_RED, ANSI_RESET,
+            __FILE__, __LINE__
         );
         fflush(stderr);
         return NULL;
@@ -29,6 +30,8 @@ SDL_Texture *Load_Texture(char *path, SDL_Renderer *render, int *w, int *h)
             path
         };
         Shows_SDL_error(err_msg, 2, ANSI_RED);
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+        fflush(stderr);
     }
     else                    // loaded image
     {
@@ -42,6 +45,8 @@ SDL_Texture *Load_Texture(char *path, SDL_Renderer *render, int *w, int *h)
                 "[Error] Failed to create texture from surface"
             };
             Shows_SDL_error(err_msg, 1, ANSI_RED);
+            fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
+            fflush(stderr);
         }
         else if (w && h)    // created texture & `w` and `h` were given
         {
