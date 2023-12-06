@@ -12,6 +12,9 @@
 # include "../def.h"
 # include "../Init/Map.h"
 
+# define Round(fnum)    ((fnum) - (int) (fnum) >= 0.5 ? (int) (fnum + 1) : (int) (fnum))
+
+
 /**
  * @brief   The state that `Player` can have.
  *  
@@ -27,11 +30,21 @@ typedef enum Player_State
 } Player_State;
 
 /**
+ * @brief   A structure that record keyboard input
+ * @param   `directions`    if user pushes keyboard, structure will store the status
+ */
+typedef struct Keyboard
+{
+    bool Up, Down, Left, Right;
+} Keyboard;
+
+/**
  * @brief   A structure that represent the character of player.
  *  
  * @param   `Tex`           the texture to render character
  * @param   `Src_rect[]`    the array of `SDL_Rect *`, each `rect` represent the position of `Tex` depends on `Current_state`
  * @param   `Current_state` the state that character have (`NORMAL`, `JUMP`, `RUN`)
+ * @param   `Key`           a structure that record keyboard input from user
  *  
  * @param   `GlobalPos_~`   the global position of character (`MAP`)
  * @param   `WindowPos_~`   the relative position of character with window (`WINDOW`, `RELATIVE`)
@@ -40,8 +53,9 @@ typedef enum Player_State
 typedef struct Player
 {
     SDL_Texture *Tex;
-    SDL_Rect *Src_rect[NUM_OF_PLAYER_STATE];
+    SDL_Rect Src_rect[NUM_OF_PLAYER_STATE];
     Player_State Current_state;
+    Keyboard Key;
 
     float GlobalPos_x;
     float GlobalPos_y;
@@ -61,6 +75,29 @@ typedef struct Player
  * @warning `Player` will be created (`WIN_WIDTH / 2`, `WIN_HEIGHT / 2`) (x, y) position initially, the middle of shown window.
  */
 Player *Create_Player(char *path, SDL_Renderer *render);
+
+// @brief   Assign `character->Src_rect[]` with each `Player` states.
+void Assign_Player_Rect(Player *character, SDL_Rect *src_rect_arr[NUM_OF_PLAYER_STATE]);
+
+/**
+ * @brief   Record keyboard input to given `record` (`Keyboard *`).
+ * 
+ * @param   `record`    a `Keyboard *` to store user input from keyboard
+ * @param   `event`     `SDL_Event *` to receive user input
+ * 
+ * @warning If `record` or `event` wasn't initialized, raise error.
+ */
+void Record_KeyState(Keyboard *record, SDL_Event *event);
+
+/**
+ * @brief   Receive a keyboard input & store the status to given parameters.
+ * 
+ * @param   `character` a `Player *` to store keyboard status, it also refresh other data (`Speed_~` member)
+ * @param   `map`       a `Map *` that represent current map
+ * @param   `event`     `SDL_Event` to receive user input
+ * @param   `flag`      a `bool *` to quit, if given event is `SDL_QUIT`, `*flag` will be set to true
+ */
+void Receive_Keyboard_input(Player *character, Map *map, SDL_Event *event, bool *quit_flag);
 
 /**
  * @brief   Move player to given coordinate. `character` will be shown to upper-middle window. (`X` : middle, `Y` : `global_y`)
@@ -106,6 +143,9 @@ void Move_Player(Player *character);
  * @param   `map`           `Map *` to load map data
  */
 void Apply_physics(Player *character, Map *map);
+
+// @brief   Render `character` to given `render`, using it's `GlobalPos`, `WindowPos` members.
+void Render_Player(Player *character, SDL_Renderer *render);
 
 // @brief   Free allocated memory assigned to `character`.
 void dispose_player(Player *character);
