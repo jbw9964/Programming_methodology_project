@@ -20,8 +20,9 @@ Map *Load_Map(int *head_of_data_arr, int arr_height, int arr_width)
     {
         // show error
         fprintf(
-            stderr, "%s%s[Error] Failed to assign map data due to invalid argument.%s\n", 
-            ANSI_BOLD, ANSI_RED, ANSI_RESET
+            stderr, "%s%s[Error] Failed to assign map data due to invalid argument.%s\n%s:%d\n", 
+            ANSI_BOLD, ANSI_RED, ANSI_RESET,
+            __FILE__, __LINE__
         );
         fflush(stderr);
         return NULL;
@@ -33,8 +34,9 @@ Map *Load_Map(int *head_of_data_arr, int arr_height, int arr_width)
     {
         // show error
         fprintf(
-            stderr, "%s%s[Error] Failed to allocate memory with loading map.%s\n", 
-            ANSI_BOLD, ANSI_RED, ANSI_RESET
+            stderr, "%s%s[Error] Failed to allocate memory with loading map.%s\n%s:%d\n", 
+            ANSI_BOLD, ANSI_RED, ANSI_RESET,
+            __FILE__, __LINE__
         );
         fflush(stderr);
     }
@@ -67,8 +69,9 @@ void Render_Map(Map *map, SDL_Renderer *render, float global_x, float window_x)
     {
         // show error
         fprintf(
-            stderr, "%s%s[Error] Failed to map. Map and renderer must be initialized.%s\n", 
-            ANSI_BOLD, ANSI_RED, ANSI_RESET
+            stderr, "%s%s[Error] Failed to map. Map and renderer must be initialized.%s\n%s:%d\n", 
+            ANSI_BOLD, ANSI_RED, ANSI_RESET,
+            __FILE__, __LINE__
         );
         fflush(stderr);
         return;
@@ -106,9 +109,9 @@ void Render_Map(Map *map, SDL_Renderer *render, float global_x, float window_x)
             if (map->Map_data[i][j])                // data to render
             {
                 // --------------------------------------------------------------------------------------------- //
-                dst_rect.x = j * map->Shrink_ratio - global_x + window_x;       // i don't know why but it works    why???????
+                dst_rect.x = j * map->Shrink_ratio - global_x + window_x + UNIT_PIXEL / 2;      // i don't know why but it works    why???????
                 // --------------------------------------------------------------------------------------------- //
-                dst_rect.y = i * map->Shrink_ratio;
+                dst_rect.y = i * map->Shrink_ratio + UNIT_PIXEL / 2;
                 SDL_RenderCopyF(render, Block, &Block_src_rect, &dst_rect);     // render
             }
         }
