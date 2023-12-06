@@ -4,6 +4,8 @@
 
 # include "./main.h"
 
+int FPS = 60;
+
 int main()
 {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -19,71 +21,79 @@ int main()
     
     Main_Window_Renderer = SDL_CreateRenderer(Main_Window, -1, SDL_RENDERER_ACCELERATED);
 
-    Player *character = Create_Player("../asset/image/player.png", Main_Window_Renderer);
-
     Map *test_map = Load_Map(&TestMap[0][0], TEST_MAP_HEIGHT, TEST_MAP_WIDTH);
     init_block();
+
+    Player *character = Create_Player("../asset/image/player.png", Main_Window_Renderer);
+    {
+        SDL_Rect *src_rects[NUM_OF_PLAYER_STATE];
+
+        src_rects[NORMAL] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
+        src_rects[NORMAL]->x = 0;
+        src_rects[NORMAL]->y = 0;
+        src_rects[NORMAL]->w = 30;
+        src_rects[NORMAL]->h = 30;
+
+        src_rects[RUN] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
+        src_rects[RUN]->x = 30;
+        src_rects[RUN]->y = 0;
+        src_rects[RUN]->w = 30;
+        src_rects[RUN]->h = 30;
+
+        src_rects[JUMP] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
+        src_rects[JUMP]->x = 60;
+        src_rects[JUMP]->y = 0;
+        src_rects[JUMP]->w = 30;
+        src_rects[JUMP]->h = 30;
+
+        Assign_Player_Rect(character, src_rects);
+
+        for (int i = 0; i < NUM_OF_PLAYER_STATE; i++)
+        {
+            free(src_rects[i]);
+            src_rects[i] = NULL;
+        }
+    }
+
 
     bool quit_flag = false;
     SDL_Event event;
 
-    const Uint8 *pKey = SDL_GetKeyboardState(NULL);
-
     while (!quit_flag)
     {
-        while (SDL_PollEvent(&event))
-        {
-            if (event.type == SDL_QUIT)     {quit_flag = true;}
-            else if (event.type == SDL_KEYUP)
-            {
-                Stop_Player(character);
-            }
-        }
+        Uint64 start = SDL_GetTicks64();
+        Receive_Keyboard_input(character, test_map, &event, &quit_flag);
+
+        if (character->GlobalPos_y >= MAP_HEIGTH)    {quit_flag = true;}
         
         SDL_SetRenderDrawColor(Main_Window_Renderer, 255, 255, 255, 255);
         SDL_RenderClear(Main_Window_Renderer);
 
-        if (pKey[SDL_SCANCODE_UP])
-        {
-            Accelerate_Player(character, 0, MAX_SPEED_Y);
-        }
-        if (pKey[SDL_SCANCODE_LEFT])
-        {
-            Accelerate_Player(character, -1 * MAX_SPEED_X / 20, 0);
-        }
-        if (pKey[SDL_SCANCODE_RIGHT])
-        {
-            Accelerate_Player(character, MAX_SPEED_X / 20, 0);
-        }
-
-        Accelerate_Player(character, 0, -1 * MAX_SPEED_Y / 10);
+        Accelerate_Player(character, 0, -1 * MAX_SPEED_Y / 50);
         Apply_physics(character, test_map);
 
         Move_Player(character);
-        SDL_Rect src_rect = {0, 0, 30, 30};
-
-        if (character->Current_state == RUN)
-        {
-            src_rect.x = 30;
-        }
-        else if (character->Current_state == JUMP)
-        {
-            src_rect.x = 60;
-        }
-
-        SDL_FRect dst_rect = {character->WindowPos_x, character->WindowPos_y, 30, 30};
-
-        // printf("%5.2f\t%5.2f\n", character->Speed_x, character->Speed_y);
-        // printf("%5.2f\t%5.2f\n", character->WindowPos_x, character->WindowPos_y);
-        // printf("%5.2f\t%5.2f\n", character->GlobalPos_x, character->GlobalPos_y);
-        // printf("\n");
 
         Render_Map(test_map, Main_Window_Renderer, character->GlobalPos_x, character->WindowPos_x);
-        SDL_RenderCopyF(Main_Window_Renderer, character->Tex, &src_rect, &dst_rect);
+        Render_Player(character, Main_Window_Renderer);
 
         SDL_RenderPresent(Main_Window_Renderer);
 
-        SDL_Delay(10);
+        Uint64 end = SDL_GetTicks64();
+
+        int time_milli = (float) 1 / FPS * 1000;
+        if (end - start < time_milli)
+        {
+            SDL_Delay(time_milli - (end - start));
+        }
+
+        # ifdef DEBUG
+            printf("%5.2f\t%5.2f\n", character->Speed_x, character->Speed_y);
+            printf("%5.2f\t%5.2f\n", character->WindowPos_x, character->WindowPos_y);
+            printf("%5.2f\t%5.2f\n", character->GlobalPos_x, character->GlobalPos_y);
+            printf("%llu\n", time_milli - (end - start));
+            printf("\n");
+        # endif
     }
 
     dispose_player(character);
@@ -97,8 +107,5 @@ int main()
 
     return 0;
 }
-
-
-
 
 # endif
