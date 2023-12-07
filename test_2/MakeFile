@@ -1,0 +1,30 @@
+CC = gcc
+CFLAGS += -g
+
+SDL_LINKING = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+INCLUDE_MAC = -I /opt/homebrew/include
+INCLUDE_LINUX = -I /usr/include/SDL2
+
+LIB_MAC = -L /opt/homebrew/lib/
+# LIB_LINUX = -L /usr/lib
+
+
+Utils.o	:	Utils/Utils.c
+	$(CC) $(CFLAGS) -c $^ $(INCLUDE_MAC) $(LIB_MAC)
+
+Player.o	:	GameObject/Player.c
+	$(CC) $(CFLAGS) -c $^ $(INCLUDE_MAC) $(LIB_MAC)
+
+main_mac.o	:	main.c Player.o Utils.o
+	$(CC) $(CFLAGS) -c $^ $(INCLUDE_MAC) $(LIB_MAC)
+
+main_mac	:	main_mac.o
+	$(CC) $(CFLAGS) main.o -o main $(INCLUDE_MAC) $(LIB_MAC) $(SDL_LINKING)
+	rm -f *.o
+	rm -f *.h.gch
+
+clean:
+	rm -f main
+	rm -f *.o
+	rm -f *.h.gch

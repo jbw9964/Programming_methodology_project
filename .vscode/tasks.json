@@ -12,7 +12,10 @@
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
-                "-lSDL2"
+                "-lSDL2",
+                "-lSDL2_image",
+                "-lSDL2_ttf",
+                "-lSDL2_mixer"
             ],
             "group": {
                 "kind": "build",
@@ -32,7 +35,11 @@
                 "/opt/homebrew/include",
                 "-L",
                 "/opt/homebrew/lib/",
-                "-lSDL2"
+                "-lSDL2",
+                "-lSDL2_image",
+                "-lSDL2_ttf",
+                "-lSDL2_mixer",
+                "-DDEBUG=1"
             ],
             "group": {
                 "kind": "build",
