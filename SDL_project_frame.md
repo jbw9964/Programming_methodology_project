@@ -30,14 +30,13 @@
     - SDL 라이브러리 공부 : [`Lazy Foo' Productions`](https://lazyfoo.net/tutorials/SDL/index.php), [`WIKI DOCS`](https://wikidocs.net/book/6636)
     - 게임 규칙 정하기 (가능하면)
 
----
-12/07 계획
-
-
 ## 성과
 - 준상
     - 2D 맵에서 3D 처럼 보이게 하는 방법(?) : [`RayCasting tutorial`](https://github.com/365kim/raycasting_tutorial)
     - 맵 구현 방법 + 테스트 코드 제작
+
+---
+12/07 계획
 
 - 해야될 것
     - 맵 구현   :   흙블록, 부서지는 블록, 안부서지는 블록, 투명블록, 가시, 지뢰, 깃발, 블랙홀
