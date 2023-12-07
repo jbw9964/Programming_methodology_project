@@ -192,6 +192,7 @@ void Receive_Keyboard_input(Player *character, Map *map, SDL_Event *event, bool 
         int index_down_x = index_x;
         int index_down_y = index_y + 1;
 
+        if (global_y <= 0) {return;}
         if (
             !((index_x < 0 || index_x >= map->Arr_Width) || (index_y >= map->Arr_Height))
             && map->Map_data[index_down_y][index_down_x]
