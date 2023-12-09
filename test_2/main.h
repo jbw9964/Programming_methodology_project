@@ -18,6 +18,7 @@ SDL_Window      *Main_Window;
 SDL_Renderer    *Main_Window_Renderer;
 
 # include "./GameObject/Player.c"
+# include "./GameObject/Enemy.c"
 # include "./Utils/Utils.c"
 # include "./Init/Map.c"
 

@@ -24,25 +24,25 @@ int main()
     Map *test_map = Load_Map(&TestMap[0][0], TEST_MAP_HEIGHT, TEST_MAP_WIDTH);
     init_block();
 
-    Player *character = Create_Player("../asset/image/player.png", Main_Window_Renderer);
+    Player *character = Create_Player("../asset/image/character.png", Main_Window_Renderer);
     {
         SDL_Rect *src_rects[NUM_OF_PLAYER_STATE];
 
         src_rects[NORMAL] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
-        src_rects[NORMAL]->x = 0;
-        src_rects[NORMAL]->y = 0;
+        src_rects[NORMAL]->x = 15;
+        src_rects[NORMAL]->y = 30;
         src_rects[NORMAL]->w = 30;
         src_rects[NORMAL]->h = 30;
 
         src_rects[RUN] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
-        src_rects[RUN]->x = 30;
-        src_rects[RUN]->y = 0;
+        src_rects[RUN]->x = 45;
+        src_rects[RUN]->y = 30;
         src_rects[RUN]->w = 30;
         src_rects[RUN]->h = 30;
 
         src_rects[JUMP] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
-        src_rects[JUMP]->x = 60;
-        src_rects[JUMP]->y = 0;
+        src_rects[JUMP]->x = 45;
+        src_rects[JUMP]->y = 30;
         src_rects[JUMP]->w = 30;
         src_rects[JUMP]->h = 30;
 
@@ -55,6 +55,8 @@ int main()
         }
     }
 
+    init_enemy();
+
 
     bool quit_flag = false;
     SDL_Event event;
@@ -62,20 +64,27 @@ int main()
     while (!quit_flag)
     {
         Uint64 start = SDL_GetTicks64();
-        Receive_Keyboard_input(character, test_map, &event, &quit_flag);
 
-        if (character->GlobalPos_y >= MAP_HEIGTH)    {quit_flag = true;}
-        
         SDL_SetRenderDrawColor(Main_Window_Renderer, 255, 255, 255, 255);
         SDL_RenderClear(Main_Window_Renderer);
 
+        Receive_Keyboard_input(character, test_map, &event, &quit_flag);
         Accelerate_Player(character, 0, -1 * MAX_SPEED_Y / 50);
         Apply_physics(character, test_map);
+        Apply_Enemy_Player_physics(character, test_enemy);
+        Apply_Enemy_Player_physics(character, test_enemy_2);
 
         Move_Player(character);
+        Patrol_Enemy(test_enemy, test_map);
+        Patrol_Enemy(test_enemy_2, test_map);
 
         Render_Map(test_map, Main_Window_Renderer, character->GlobalPos_x, character->WindowPos_x);
+        Render_Enemy(test_enemy, Main_Window_Renderer, character->GlobalPos_x, character->WindowPos_x);
+        Render_Enemy(test_enemy_2, Main_Window_Renderer, character->GlobalPos_x, character->WindowPos_x);
         Render_Player(character, Main_Window_Renderer);
+
+        if (character->GlobalPos_y >= MAP_HEIGTH)       {quit_flag = true;}
+        if (character->is_dead)                         {quit_flag = true;}
 
         SDL_RenderPresent(Main_Window_Renderer);
 
@@ -96,6 +105,8 @@ int main()
         # endif
     }
 
+    dispose_enemy(test_enemy);
+    dispose_enemy(test_enemy_2);
     dispose_player(character);
     dispose_map(test_map);
 
