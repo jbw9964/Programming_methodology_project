@@ -7,11 +7,72 @@
 // temporary function to load block texture
 void init_block()
 {
-    Block = Load_Texture("../asset/image/blocks_1.png", Main_Window_Renderer, NULL, NULL);
-    Block_src_rect.x = 30;
-    Block_src_rect.y = 0;
-    Block_src_rect.w = 30;
-    Block_src_rect.h = 30;
+    Block = Load_Texture("../asset/image/block2.png", Main_Window_Renderer, NULL, NULL);
+
+    // Texture Loading for Invisible Block
+    T_Block = Load_Texture("../asset/image/block2.png", Main_Window_Renderer, NULL, NULL);
+    // Invisible Block's Alpha modulating
+    SDL_SetTextureAlphaMod(T_Block, 16); 
+
+    for (int i = 0 ; i < TEST_MAP_HEIGHT ; i++)
+    {
+        for (int j = 0 ; j < TEST_MAP_WIDTH ; j++)
+        {
+            switch (TestMap[i][j])
+            {
+                case 1: // Unbreakable Block
+                    Block_src_rect1.x = 123;
+                    Block_src_rect1.y = 45;
+                    Block_src_rect1.w = UNIT_PIXEL;
+                    Block_src_rect1.h = UNIT_PIXEL;
+                    break;
+                case 2: // breakable Block
+                    Block_src_rect2.x = 200;
+                    Block_src_rect2.y = 43;
+                    Block_src_rect2.w = UNIT_PIXEL;
+                    Block_src_rect2.h = UNIT_PIXEL;
+                    break;
+                case 3: // Base
+                    Block_src_rect3.x = 278;
+                    Block_src_rect3.y = 45;
+                    Block_src_rect3.w = UNIT_PIXEL;
+                    Block_src_rect3.h = UNIT_PIXEL;
+                    break;
+                case 4: // Thorn
+                    Block_src_rect4.x = 45;
+                    Block_src_rect4.y = 123;
+                    Block_src_rect4.w = UNIT_PIXEL;
+                    Block_src_rect4.h = UNIT_PIXEL;
+                    break;
+                case 5: // Mine
+                    Block_src_rect5.x = 123;
+                    Block_src_rect5.y = 123;
+                    Block_src_rect5.w = UNIT_PIXEL;
+                    Block_src_rect5.h = UNIT_PIXEL/2;
+                    break;
+                case 6: // Black-Hole
+                    Block_src_rect6.x = 200;
+                    Block_src_rect6.y = 123;
+                    Block_src_rect6.w = UNIT_PIXEL;
+                    Block_src_rect6.h = UNIT_PIXEL;
+                    break;
+                case 7: // Flag
+                    Block_src_rect7.x = 278;
+                    Block_src_rect7.y = 123;
+                    Block_src_rect7.w = UNIT_PIXEL;
+                    Block_src_rect7.h = UNIT_PIXEL;
+                    break;
+                case 9: // Invisible Bolck
+                    T_Block_src_rect9.x = 45;
+                    T_Block_src_rect9.y = 45;
+                    T_Block_src_rect9.w = UNIT_PIXEL;
+                    T_Block_src_rect9.h = UNIT_PIXEL;
+                    break;
+                default :
+                    break;
+            }
+        }
+    }
 }
 
 Map *Load_Map(int *head_of_data_arr, int arr_height, int arr_width)
@@ -106,13 +167,56 @@ void Render_Map(Map *map, SDL_Renderer *render, float global_x, float window_x)
     {
         for (int j = x_left; j < x_right + 1; j++)  // column   --> add 1 more column to render (x_right + 1), it looks smoother
         {
-            if (map->Map_data[i][j])                // data to render
-            {
-                // --------------------------------------------------------------------------------------------- //
+            // --------------------------------------------------------------------------------------------- //
                 dst_rect.x = j * map->Shrink_ratio - global_x + window_x + UNIT_PIXEL / 2;      // i don't know why but it works    why???????
                 // --------------------------------------------------------------------------------------------- //
                 dst_rect.y = i * map->Shrink_ratio + UNIT_PIXEL / 2;
-                SDL_RenderCopyF(render, Block, &Block_src_rect, &dst_rect);     // render
+
+            switch (map->Map_data[i][j])                // data to render
+            {
+                case 0: break; // Not rendering for empty space
+
+                case 1:
+                SDL_RenderCopyF(render, Block, &Block_src_rect1, &dst_rect);       // render Unbreakable Block
+                break;
+
+                case 2:
+                SDL_RenderCopyF(render, Block, &Block_src_rect2, &dst_rect);       // render breakable Block
+                break;
+
+                case 3:
+                SDL_RenderCopyF(render, Block, &Block_src_rect3, &dst_rect);       // render Base 
+                break;
+
+                case 4:
+                SDL_RenderCopyF(render, Block, &Block_src_rect4, &dst_rect);       // render Thorn
+                break;                        
+
+                case 5:
+                SDL_RenderCopyF(render, Block, &Block_src_rect5, &dst_rect);       // render Mine 
+                break;
+
+                case 6:
+                SDL_RenderCopyF(render, Block, &Block_src_rect6, &dst_rect);       // render Black-Hole
+                break;
+
+                case 7:
+                SDL_RenderCopyF(render, Block, &Block_src_rect7, &dst_rect);       // render Flag
+                break;
+
+                case 9:
+                SDL_RenderCopyF(render, T_Block, &T_Block_src_rect9, &dst_rect);   // render Invisible Block
+                break;
+
+                default :           // unexpected block
+                fprintf(
+                    stderr, 
+                    "%s%s[Error] Unexpected block encoutnered.%s\n%s:%d\n", 
+                    ANSI_BOLD, ANSI_RED, ANSI_RESET, 
+                    __FILE__, __LINE__
+                );
+                fflush(stderr);
+                return;
             }
         }
     }
