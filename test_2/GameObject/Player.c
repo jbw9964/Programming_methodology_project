@@ -75,10 +75,18 @@ Player *Create_Player(char *path, SDL_Renderer *render)
         new_player->Key.Down = false;
         new_player->Key.Left = false;
         new_player->Key.Right = false;
+        
+        new_player->is_dead = false;
     }
 
     // if it failed to create texture, `NULL` will be returned
     return new_player;
+}
+
+void Kill_Player(Player *character)
+{
+    if (!character)     {return;}
+    character->is_dead = true;
 }
 
 void Assign_Player_Rect(Player *character, SDL_Rect *src_rect_arr[NUM_OF_PLAYER_STATE])

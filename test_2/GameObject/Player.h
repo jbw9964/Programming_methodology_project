@@ -12,8 +12,6 @@
 # include "../def.h"
 # include "../Init/Map.h"
 
-# define Round(fnum)    ((fnum) - (int) (fnum) >= 0.5 ? (int) (fnum + 1) : (int) (fnum))
-
 
 /**
  * @brief   The state that `Player` can have.
@@ -49,6 +47,7 @@ typedef struct Keyboard
  * @param   `GlobalPos_~`   the global position of character (`MAP`)
  * @param   `WindowPos_~`   the relative position of character with window (`WINDOW`, `RELATIVE`)
  * @param   `Speed_~`       the speed of character, it will be limited by `MAX_SPEED_X` & `MAX_SPEED_Y`
+ * @param   `is_dead`       represent player is dead or not
  */
 typedef struct Player
 {
@@ -63,6 +62,7 @@ typedef struct Player
     float WindowPos_y;
     float Speed_x;
     float Speed_y;
+    bool is_dead;
 } Player;
 
 /**
@@ -75,6 +75,9 @@ typedef struct Player
  * @warning `Player` will be created (`WIN_WIDTH / 2`, `WIN_HEIGHT / 2`) (x, y) position initially, the middle of shown window.
  */
 Player *Create_Player(char *path, SDL_Renderer *render);
+
+// @brief   Set member of `character`, `is_dead` as true
+void Kill_Player(Player *character);
 
 // @brief   Assign `character->Src_rect[]` with each `Player` states.
 void Assign_Player_Rect(Player *character, SDL_Rect *src_rect_arr[NUM_OF_PLAYER_STATE]);
