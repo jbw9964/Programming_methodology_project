@@ -12,6 +12,7 @@ int main()
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
     IMG_Init(IMG_INIT_PNG);
 
+
     Main_Window = SDL_CreateWindow(
         "main", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
         WIN_WIDTH, WIN_HEIGHT, 
@@ -24,27 +25,29 @@ int main()
     Map *test_map = Load_Map(&TestMap[0][0], TEST_MAP_HEIGHT, TEST_MAP_WIDTH);
     init_block();
 
-    Player *character = Create_Player("../asset/image/player.png", Main_Window_Renderer);
+    Player *character = Create_Player("../asset/image/player.png", Main_Window_Renderer);    
     {
         SDL_Rect *src_rects[NUM_OF_PLAYER_STATE];
 
         src_rects[NORMAL] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
-        src_rects[NORMAL]->x = 0;
-        src_rects[NORMAL]->y = 0;
-        src_rects[NORMAL]->w = 30;
-        src_rects[NORMAL]->h = 30;
+        src_rects[NORMAL]->x = 45;
+        src_rects[NORMAL]->y = 36;
+        src_rects[NORMAL]->w = UNIT_PIXEL*1.1;
+        src_rects[NORMAL]->h = UNIT_PIXEL*1.1;
 
         src_rects[RUN] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
-        src_rects[RUN]->x = 30;
-        src_rects[RUN]->y = 0;
-        src_rects[RUN]->w = 30;
-        src_rects[RUN]->h = 30;
+        src_rects[RUN]->x = 45;
+        src_rects[RUN]->y = 36;
+        src_rects[RUN]->w = UNIT_PIXEL*1.1;
+        src_rects[RUN]->h = UNIT_PIXEL*1.1;
 
         src_rects[JUMP] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
-        src_rects[JUMP]->x = 60;
-        src_rects[JUMP]->y = 0;
-        src_rects[JUMP]->w = 30;
-        src_rects[JUMP]->h = 30;
+        src_rects[JUMP]->x = 45;
+        src_rects[JUMP]->y = 36;
+        src_rects[JUMP]->w = UNIT_PIXEL*1.1;
+        src_rects[JUMP]->h = UNIT_PIXEL*1.1;
+
+        // Now, Same Image for Three state
 
         Assign_Player_Rect(character, src_rects);
 
@@ -55,13 +58,12 @@ int main()
         }
     }
 
-
     bool quit_flag = false;
     SDL_Event event;
 
     while (!quit_flag)
     {
-        Uint64 start = SDL_GetTicks64();
+        Uint64 start = SDL_GetTicks();
         Receive_Keyboard_input(character, test_map, &event, &quit_flag);
 
         if (character->GlobalPos_y >= MAP_HEIGTH)    {quit_flag = true;}
@@ -79,7 +81,7 @@ int main()
 
         SDL_RenderPresent(Main_Window_Renderer);
 
-        Uint64 end = SDL_GetTicks64();
+        Uint64 end = SDL_GetTicks();
 
         int time_milli = (float) 1 / FPS * 1000;
         if (end - start < time_milli)
