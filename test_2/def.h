@@ -12,8 +12,7 @@
 
 
 // <Init/Map.h>
-    # define MAP_WIDTH      1380            // the global width of map, must be multiple of `UNIT_PIXEL` (30 * 115, 690 * 3)
-    // # define MAP_WIDTH      3450            // the global width of map, must be multiple of `UNIT_PIXEL` (30 * 115, 690 * 3)
+    # define MAP_WIDTH      3150            // the global width of map, must be multiple of `UNIT_PIXEL` (30 * 105)
     # define MAP_HEIGTH     WIN_HEIGHT      // the global height of map, must be multiple of `UNIT_PIXEL`
 
     # define UNIT_PIXEL     30              // a unit pixel to render
