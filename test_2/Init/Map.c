@@ -7,9 +7,9 @@
 // temporary function to load block texture
 void init_block()
 {
-    Block = Load_Texture("../asset/image/blocks_1.png", Main_Window_Renderer, NULL, NULL);
-    Block_src_rect.x = 30;
-    Block_src_rect.y = 0;
+    Block = Load_Texture("../asset/image/block2.png", Main_Window_Renderer, NULL, NULL);
+    Block_src_rect.x = 123;
+    Block_src_rect.y = 45;
     Block_src_rect.w = 30;
     Block_src_rect.h = 30;
 }
