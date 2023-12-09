@@ -91,8 +91,9 @@ void Kill_Player(Player *character)
 
 void Assign_Player_Rect(Player *character, SDL_Rect *src_rect_arr[NUM_OF_PLAYER_STATE])
 {
-    if (!character || !src_rect_arr)
+    if (!character || !src_rect_arr)        // invalid arguments
     {
+        // show error & abort
         fprintf(
             stderr, "%s%s[Error] Given `character` or `src_rect_arr` hasn't initalized.%s\n%s:%d\n", 
             ANSI_BOLD, ANSI_RED, ANSI_RESET,
@@ -102,10 +103,12 @@ void Assign_Player_Rect(Player *character, SDL_Rect *src_rect_arr[NUM_OF_PLAYER_
         return;
     }
 
+    // check whether `*src_rect_arr` is valid
     for (int i = 0; i < NUM_OF_PLAYER_STATE; i++)
     {
-        if (!src_rect_arr[i])
+        if (!src_rect_arr[i])       // some what invalid elements, probably due to wrong memory allocation or reference of pointer
         {
+            // show error & abbort
             fprintf(
                 stderr, "%s%s[Error] Invalid array element in `src_rect_arr`.%s\n%s:%d\n", 
                 ANSI_BOLD, ANSI_RED, ANSI_RESET,
@@ -116,6 +119,7 @@ void Assign_Player_Rect(Player *character, SDL_Rect *src_rect_arr[NUM_OF_PLAYER_
         }
     }
 
+    // assign `Src_rect` elements to given values
     for (int i = 0; i < NUM_OF_PLAYER_STATE; i++)
     {
         character->Src_rect[i].x = src_rect_arr[i]->x;
@@ -200,8 +204,8 @@ void Receive_Keyboard_input(Player *character, Map *map, SDL_Event *event, bool 
         int index_down_x = index_x;
         int index_down_y = index_y + 1;
 
-        if (global_y <= 0) {return;}
-        if (
+        if (global_y <= 0)      {return;}           // Player is out of upper window, do not accelerate player
+        if (                                        // Player is in window properly, accelerate player
             !((index_x < 0 || index_x >= map->Arr_Width) || (index_y >= map->Arr_Height))
             && map->Map_data[index_down_y][index_down_x]
         )
@@ -426,8 +430,9 @@ void Apply_physics(Player *character, Map *map)
 
 void Render_Player(Player *character, SDL_Renderer *render)
 {
-    if (!character || !render)  {return;}
+    if (!character || !render)  {return;}       // invalid arguments
     
+    // the window coordinate to render character
     SDL_FRect dst_rect = {
         character->WindowPos_x + UNIT_PIXEL / 2, 
         character->WindowPos_y + UNIT_PIXEL / 2, 
@@ -435,6 +440,8 @@ void Render_Player(Player *character, SDL_Renderer *render)
     };
 
     Player_State state = character->Current_state;
+
+    // render character texture with it's current state to window coordinate
     SDL_RenderCopyF(render, character->Tex, &character->Src_rect[state], &dst_rect);
 }
 
@@ -445,13 +452,6 @@ void dispose_player(Player *character)
         // good to dispose
         if (character->Tex)     {SDL_DestroyTexture(character->Tex);}   // free texture
         character->Tex = NULL;
-
-        // for (int i = 0; i < NUM_OF_PLAYER_STATE; i++)       // free allocated array
-        // {
-        //     if (character->Src_rect[i])     {free(character->Src_rect[i]);}
-        //     character->Src_rect[i] = NULL;
-        // }
-        
         free(character);    // free allocated memory
     }
 }
