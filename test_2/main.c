@@ -25,15 +25,15 @@ int main()
     Map *test_map = Load_Map(&TestMap[0][0], TEST_MAP_HEIGHT, TEST_MAP_WIDTH);
     init_block();
 
-    Player *character = Create_Player("../asset/image/player.png", Main_Window_Renderer);    
+    Player *character = Create_Player("../asset/image/character2.png", Main_Window_Renderer);    
     {
         SDL_Rect *src_rects[NUM_OF_PLAYER_STATE];
 
         src_rects[NORMAL] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
-        src_rects[NORMAL]->x = 45;
-        src_rects[NORMAL]->y = 36;
-        src_rects[NORMAL]->w = UNIT_PIXEL*1.1;
-        src_rects[NORMAL]->h = UNIT_PIXEL*1.1;
+        src_rects[NORMAL]->x = 286;
+        src_rects[NORMAL]->y = 37;
+        src_rects[NORMAL]->w = UNIT_PIXEL*1.25;
+        src_rects[NORMAL]->h = UNIT_PIXEL*1.25;
 
         src_rects[RUN] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
         src_rects[RUN]->x = 45;
@@ -58,6 +58,8 @@ int main()
         }
     }
 
+    init_message();
+
     bool quit_flag = false;
     SDL_Event event;
 
@@ -67,7 +69,7 @@ int main()
         Receive_Keyboard_input(character, test_map, &event, &quit_flag);
 
         if (character->GlobalPos_y >= MAP_HEIGTH)    {quit_flag = true;}
-        
+
         SDL_SetRenderDrawColor(Main_Window_Renderer, 255, 255, 255, 255);
         SDL_RenderClear(Main_Window_Renderer);
 
@@ -75,9 +77,11 @@ int main()
         Apply_physics(character, test_map);
 
         Move_Player(character);
+        Apply_Block_Player_physics(character, test_map);
 
         Render_Map(test_map, Main_Window_Renderer, character->GlobalPos_x, character->WindowPos_x);
         Render_Player(character, Main_Window_Renderer);
+        Render_Message(Main_Window_Renderer, WIN_WIDTH / 4, WIN_HEIGHT / 4);
 
         SDL_RenderPresent(Main_Window_Renderer);
 
@@ -93,7 +97,7 @@ int main()
             printf("%5.2f\t%5.2f\n", character->Speed_x, character->Speed_y);
             printf("%5.2f\t%5.2f\n", character->WindowPos_x, character->WindowPos_y);
             printf("%5.2f\t%5.2f\n", character->GlobalPos_x, character->GlobalPos_y);
-            printf("%llu\n", time_milli - (end - start));
+            printf("%lu\n", time_milli - (end - start));
             printf("\n");
         # endif
     }
