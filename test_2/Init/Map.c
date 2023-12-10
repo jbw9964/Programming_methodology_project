@@ -3,6 +3,8 @@
 # define __MAP__C
 
 # include "./Map.h"
+# include "../GameObject/Player.h" //추가
+
 
 // temporary function to load block texture
 void init_block()
@@ -14,65 +16,80 @@ void init_block()
     // Invisible Block's Alpha modulating
     SDL_SetTextureAlphaMod(T_Block, 16); 
 
-    for (int i = 0 ; i < TEST_MAP_HEIGHT ; i++)
-    {
-        for (int j = 0 ; j < TEST_MAP_WIDTH ; j++)
-        {
-            switch (TestMap[i][j])
-            {
-                case 1: // Unbreakable Block
-                    Block_src_rect1.x = 123;
-                    Block_src_rect1.y = 45;
-                    Block_src_rect1.w = UNIT_PIXEL;
-                    Block_src_rect1.h = UNIT_PIXEL;
-                    break;
-                case 2: // breakable Block
-                    Block_src_rect2.x = 200;
-                    Block_src_rect2.y = 43;
-                    Block_src_rect2.w = UNIT_PIXEL;
-                    Block_src_rect2.h = UNIT_PIXEL;
-                    break;
-                case 3: // Base
-                    Block_src_rect3.x = 278;
-                    Block_src_rect3.y = 45;
-                    Block_src_rect3.w = UNIT_PIXEL;
-                    Block_src_rect3.h = UNIT_PIXEL;
-                    break;
-                case 4: // Thorn
-                    Block_src_rect4.x = 45;
-                    Block_src_rect4.y = 123;
-                    Block_src_rect4.w = UNIT_PIXEL;
-                    Block_src_rect4.h = UNIT_PIXEL;
-                    break;
-                case 5: // Mine
-                    Block_src_rect5.x = 123;
-                    Block_src_rect5.y = 123;
-                    Block_src_rect5.w = UNIT_PIXEL;
-                    Block_src_rect5.h = UNIT_PIXEL/2;
-                    break;
-                case 6: // Black-Hole
-                    Block_src_rect6.x = 200;
-                    Block_src_rect6.y = 123;
-                    Block_src_rect6.w = UNIT_PIXEL;
-                    Block_src_rect6.h = UNIT_PIXEL;
-                    break;
-                case 7: // Flag
-                    Block_src_rect7.x = 278;
-                    Block_src_rect7.y = 123;
-                    Block_src_rect7.w = UNIT_PIXEL;
-                    Block_src_rect7.h = UNIT_PIXEL;
-                    break;
-                case 9: // Invisible Bolck
-                    T_Block_src_rect9.x = 45;
-                    T_Block_src_rect9.y = 45;
-                    T_Block_src_rect9.w = UNIT_PIXEL;
-                    T_Block_src_rect9.h = UNIT_PIXEL;
-                    break;
-                default :
-                    break;
-            }
-        }
-    }
+    
+    // Unbreakable Block
+    Block_src_rect1.x = 123;
+    Block_src_rect1.y = 45;
+    Block_src_rect1.w = UNIT_PIXEL;
+    Block_src_rect1.h = UNIT_PIXEL;
+
+    // breakable Block
+    Block_src_rect2.x = 200;
+    Block_src_rect2.y = 43;
+    Block_src_rect2.w = UNIT_PIXEL;
+    Block_src_rect2.h = UNIT_PIXEL;
+    
+    // Base
+    Block_src_rect3.x = 278;
+    Block_src_rect3.y = 45;
+    Block_src_rect3.w = UNIT_PIXEL;
+    Block_src_rect3.h = UNIT_PIXEL;
+
+    // Thorn
+    Block_src_rect4.x = 45;
+    Block_src_rect4.y = 123;
+    Block_src_rect4.w = UNIT_PIXEL;
+    Block_src_rect4.h = UNIT_PIXEL;
+
+    // Mine
+    Block_src_rect5.x = 123;
+    Block_src_rect5.y = 123;
+    Block_src_rect5.w = UNIT_PIXEL;
+    Block_src_rect5.h = UNIT_PIXEL/2;
+    
+    // Black-Hole
+    Block_src_rect6.x = 200;
+    Block_src_rect6.y = 123;
+    Block_src_rect6.w = UNIT_PIXEL;
+    Block_src_rect6.h = UNIT_PIXEL;
+    
+    // Flag
+    Block_src_rect7.x = 278;
+    Block_src_rect7.y = 123;
+    Block_src_rect7.w = UNIT_PIXEL;
+    Block_src_rect7.h = UNIT_PIXEL;
+    
+    // Ending Black-Hole
+    Block_src_rect8.x = 200;
+    Block_src_rect8.y = 123;
+    Block_src_rect8.w = UNIT_PIXEL;
+    Block_src_rect8.h = UNIT_PIXEL;
+    
+    // Invisible Bolck
+    T_Block_src_rect9.x = 45;
+    T_Block_src_rect9.y = 45;
+    T_Block_src_rect9.w = UNIT_PIXEL;
+    T_Block_src_rect9.h = UNIT_PIXEL;
+    
+}
+
+
+// 추가
+void init_message()
+{
+    Message = Load_Texture("../asset/image/clear_dead.png", Main_Window_Renderer, NULL, NULL);
+
+    // clear : 1
+    Message_src_rect1.x = 27;
+    Message_src_rect1.y = 33;
+    Message_src_rect1.w = UNIT_PIXEL * 23;
+    Message_src_rect1.h = UNIT_PIXEL * 2.6;
+
+    // dead : 0
+    Message_src_rect2.x = 27;
+    Message_src_rect2.y = 140;
+    Message_src_rect2.w = UNIT_PIXEL * 23;
+    Message_src_rect2.h = UNIT_PIXEL * 2.6;
 }
 
 Map *Load_Map(int *head_of_data_arr, int arr_height, int arr_width)
@@ -204,6 +221,10 @@ void Render_Map(Map *map, SDL_Renderer *render, float global_x, float window_x)
                 SDL_RenderCopyF(render, Block, &Block_src_rect7, &dst_rect);       // render Flag
                 break;
 
+                case 8:
+                SDL_RenderCopyF(render, Block, &Block_src_rect8, &dst_rect);       // render "Ending" Black-Hole
+                break;
+
                 case 9:
                 SDL_RenderCopyF(render, T_Block, &T_Block_src_rect9, &dst_rect);   // render Invisible Block
                 break;
@@ -220,6 +241,38 @@ void Render_Map(Map *map, SDL_Renderer *render, float global_x, float window_x)
             }
         }
     }
+}
+
+// 추가
+void Render_Message(SDL_Renderer *render, float WindowPos_x, float WindowPos_y)
+{
+    if (!render)      // invalid argument
+    {
+        // show error
+        fprintf(
+            stderr, "%s%s[Error] Failed to open message. Message must be initialized.%s\n%s:%d\n", 
+            ANSI_BOLD, ANSI_RED, ANSI_RESET,
+            __FILE__, __LINE__
+        );
+        fflush(stderr);
+        return;
+    }
+
+    // the destination to render
+    SDL_FRect dst_rect_message;             // using float-rectangle
+    dst_rect_message.x = 20;
+    dst_rect_message.y = WindowPos_y;
+    dst_rect_message.w = WIN_WIDTH;
+    dst_rect_message.h = UNIT_PIXEL * 2.6;
+
+    if (Condition == 1)      {
+        printf("true\n");
+        SDL_RenderCopyF(render, Message, &Message_src_rect1, &dst_rect_message);
+    } // clear : 1
+    else if (Condition == 0) {
+        printf("False\n");
+        SDL_RenderCopyF(render, Message, &Message_src_rect2, &dst_rect_message);
+    } // dead : 0
 }
 
 void dispose_map(Map *map)
@@ -239,6 +292,5 @@ void dispose_map(Map *map)
         free(map);          // free allocated memory
     }
 }
-
 
 # endif
