@@ -96,3 +96,18 @@ T_Block_src_rect9.y = 45;
 T_Block_src_rect9.w = UNIT_PIXEL;
 T_Block_src_rect9.h = UNIT_PIXEL;
 
+
+Clear - Dead message Position
+
+// clear : 1
+    Message_src_rect2.x = 27;
+    Message_src_rect2.y = 33;
+    Message_src_rect2.w = UNIT_PIXEL * 23;
+    Message_src_rect2.h = UNIT_PIXEL * 2.6;
+
+
+// dead : 0
+    Message_src_rect2.x = 27;
+    Message_src_rect2.y = 142;
+    Message_src_rect2.w = UNIT_PIXEL * 23;
+    Message_src_rect2.h = UNIT_PIXEL * 3;
