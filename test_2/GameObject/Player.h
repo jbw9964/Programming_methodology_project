@@ -10,7 +10,6 @@
 # include <SDL2/SDL_image.h>
 
 # include "../def.h"
-# include "../Init/Map.h"
 
 # define Round(fnum)    ((fnum) - (int) (fnum) >= 0.5 ? (int) (fnum + 1) : (int) (fnum))
 
@@ -29,10 +28,10 @@ typedef enum Player_State
     RUN
 } Player_State;
 
-/**
+/*
  * @brief   A structure that record keyboard input
  * @param   `directions`    if user pushes keyboard, structure will store the status
- */
+*/
 typedef struct Keyboard
 {
     bool Up, Down, Left, Right;
@@ -63,9 +62,12 @@ typedef struct Player
     float WindowPos_y;
     float Speed_x;
     float Speed_y;
+    bool is_dead;
 } Player;
 
-/**
+# include "../Init/Map.h"
+
+/*
  * @brief   Create `Player` structure with given arguments.
  *  
  * @param   `path`      path to PNG image
@@ -75,6 +77,8 @@ typedef struct Player
  * @warning `Player` will be created (`WIN_WIDTH / 2`, `WIN_HEIGHT / 2`) (x, y) position initially, the middle of shown window.
  */
 Player *Create_Player(char *path, SDL_Renderer *render);
+
+void Kill_Player(Player *character);
 
 // @brief   Assign `character->Src_rect[]` with each `Player` states.
 void Assign_Player_Rect(Player *character, SDL_Rect *src_rect_arr[NUM_OF_PLAYER_STATE]);
@@ -150,6 +154,10 @@ void Render_Player(Player *character, SDL_Renderer *render);
 // @brief   Free allocated memory assigned to `character`.
 void dispose_player(Player *character);
 
+// 추가--------------------------------------------------------------
+void Apply_Block_Player_physics(Player *character, Map *map);
+int Condition = 2; // 1 : Clear  0 : Dead
+//-------------------------------------------------------------------
 
 extern SDL_Texture *Load_Texture(char *path, SDL_Renderer *render, int *w, int *h);
 
