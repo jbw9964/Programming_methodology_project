@@ -42,7 +42,7 @@ int TestMap[TEST_MAP_HEIGHT][TEST_MAP_WIDTH] = {
 5 : Mine              |    -> Same Numbering with "SDL_Rect"
 6 : Black-Hole        |
 7 : Flag              |
-8 : (free space)      |
+8 : free space        |
 9 : Invisible Block   |     
 */
 
@@ -89,6 +89,9 @@ Map *Load_Map(int *head_of_data_arr, int arr_height, int arr_width);
  */
 void Render_Map(Map *map, SDL_Renderer *render, float global_x, float window_x);
 
+// 추가
+void Render_Message(SDL_Renderer *render, float WindowPos_x, float WindowPos_y);
+
 // @brief   Free allocated memory assigned to `map`.
 void dispose_map(Map *map);
 
@@ -97,6 +100,7 @@ extern SDL_Renderer *Main_Window_Renderer;
 
 SDL_Texture *Block;
 SDL_Texture *T_Block;
+SDL_Texture *Message;
 
 SDL_Rect Block_src_rect1;
 SDL_Rect Block_src_rect2;
@@ -105,6 +109,9 @@ SDL_Rect Block_src_rect4;
 SDL_Rect Block_src_rect5;
 SDL_Rect Block_src_rect6;
 SDL_Rect Block_src_rect7;
+SDL_Rect Block_src_rect8;
 SDL_Rect T_Block_src_rect9;
+SDL_Rect Message_src_rect1; // clear
+SDL_Rect Message_src_rect2; // dead
 
 # endif
