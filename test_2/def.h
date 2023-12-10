@@ -17,8 +17,6 @@
 
     # define UNIT_PIXEL     30              // a unit pixel to render
 
-
-
 // <GameObject/Player.h>
     # define MAX_SPEED_X    300              // maximum speed that player can have
     # define MAX_SPEED_Y    600              // maximum speed that player can have
@@ -29,6 +27,7 @@
     # define KEY_DOWN   SDL_SCANCODE_DOWN   // a `SDL_Scancode` that represent `DOWN` keyboard direction
     # define KEY_LEFT   SDL_SCANCODE_LEFT   // a `SDL_Scancode` that represent `LEFT` keyboard direction
     # define KEY_RIGHT  SDL_SCANCODE_RIGHT  // a `SDL_Scancode` that represent `RIGHT` keyboard direction
+    # define Key_R      SDL_SCANCODE_R      // a `SDL_Scancode` that represent `R'
 
     # define UNIT_TIME_STEP         (1 / 60.)   // time step to calculate position (60 FPS)
 
