@@ -73,11 +73,12 @@ int main()
         SDL_SetRenderDrawColor(Main_Window_Renderer, 255, 255, 255, 255);
         SDL_RenderClear(Main_Window_Renderer);
 
-        Accelerate_Player(character, 0, -1 * MAX_SPEED_Y / 50);
-        Apply_physics(character, test_map);
+        if (!character->is_dead)    {Accelerate_Player(character, 0, -1 * MAX_SPEED_Y / 50);}
+        else                        {Stop_Player(character);}
+        Apply_Block_Interruption(character, test_map);
 
         Move_Player(character);
-        Apply_Block_Player_physics(character, test_map);
+        Apply_Block_Object_logic(character, test_map);
 
         Render_Map(test_map, Main_Window_Renderer, character->GlobalPos_x, character->WindowPos_x);
         Render_Player(character, Main_Window_Renderer);
@@ -97,7 +98,7 @@ int main()
             printf("%5.2f\t%5.2f\n", character->Speed_x, character->Speed_y);
             printf("%5.2f\t%5.2f\n", character->WindowPos_x, character->WindowPos_y);
             printf("%5.2f\t%5.2f\n", character->GlobalPos_x, character->GlobalPos_y);
-            printf("%lu\n", time_milli - (end - start));
+            printf("%llu\n", time_milli - (end - start));
             printf("\n");
         # endif
     }
