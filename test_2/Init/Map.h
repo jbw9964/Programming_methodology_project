@@ -14,6 +14,9 @@
 # define TEST_MAP_HEIGHT            16
 # define TEST_MAP_SHRINK_RATIO      30
 
+# define TEST_GOAL_POS_X            5
+# define TEST_GOAL_POS_Y            6
+
 int TestMap[TEST_MAP_HEIGHT][TEST_MAP_WIDTH] = {
     { 1,0,0,0,0,0,0,0,0,0, 0,0,1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,9,0,0,0,0,0, 0,0,9,0,0,0,0,0,0,0, 0,0,0,0,9,0,0,0,0,0, 1,1,1,1,1,0,0,0,0,0, 0,0,0,0,0,9,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,1,0,0,0,0,0,0,0,0, 0,2,2,2,1},
     { 1,0,0,0,0,0,0,0,0,0, 0,0,1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,9,0,0,0,0,0, 0,0,9,0,0,0,0,0,0,0, 0,0,0,0,9,0,0,0,0,0, 0,1,1,1,1,0,0,0,0,0, 0,0,0,0,0,9,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,1,0,0,0,0,0,0,0,0, 0,2,7,2,1},
@@ -98,19 +101,13 @@ void dispose_map(Map *map);
 extern SDL_Texture *Load_Texture(char *path, SDL_Renderer *render, int *w, int *h);
 extern SDL_Renderer *Main_Window_Renderer;
 
-SDL_Texture *Block;
-SDL_Texture *T_Block;
-SDL_Texture *Message;
+SDL_Texture *Block_texture_WHOLE;           // texture that holds every block
+SDL_Texture *Block_texture_INVISIBLE;       // texture that holds invisible block
+SDL_Texture *Message_texture_WHOLE;         // texture that holds every message image
 
-SDL_Rect Block_src_rect1;
-SDL_Rect Block_src_rect2;
-SDL_Rect Block_src_rect3;
-SDL_Rect Block_src_rect4;
-SDL_Rect Block_src_rect5;
-SDL_Rect Block_src_rect6;
-SDL_Rect Block_src_rect7;
-SDL_Rect Block_src_rect8;
-SDL_Rect T_Block_src_rect9;
+SDL_Rect Block_src_rects[NUM_OF_BLOCK_KIND];
+SDL_Rect Message_src_rects[NUM_OF_MSG_TEXT];
+
 SDL_Rect Message_src_rect1; // clear
 SDL_Rect Message_src_rect2; // dead
 

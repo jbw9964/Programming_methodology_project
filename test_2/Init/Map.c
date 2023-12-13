@@ -9,87 +9,86 @@
 // temporary function to load block texture
 void init_block()
 {
-    Block = Load_Texture("../asset/image/block2.png", Main_Window_Renderer, NULL, NULL);
+    Block_texture_WHOLE = Load_Texture("../asset/image/block2.png", Main_Window_Renderer, NULL, NULL);
 
     // Texture Loading for Invisible Block
-    T_Block = Load_Texture("../asset/image/block2.png", Main_Window_Renderer, NULL, NULL);
+    Block_texture_INVISIBLE = Load_Texture("../asset/image/block2.png", Main_Window_Renderer, NULL, NULL);
     // Invisible Block's Alpha modulating
-    SDL_SetTextureAlphaMod(T_Block, 16); 
+    SDL_SetTextureAlphaMod(Block_texture_INVISIBLE, 16); 
 
-    
-    // Unbreakable Block
-    Block_src_rect1.x = 123;
-    Block_src_rect1.y = 45;
-    Block_src_rect1.w = UNIT_PIXEL;
-    Block_src_rect1.h = UNIT_PIXEL;
+    {   // assign rectangular coordinates to each block
+        // Unbreakable Block
+        Block_src_rects[BLOCK_UNBREAKABLE].x = 123;
+        Block_src_rects[BLOCK_UNBREAKABLE].y = 45;
+        Block_src_rects[BLOCK_UNBREAKABLE].w = 30;
+        Block_src_rects[BLOCK_UNBREAKABLE].h = 30;
 
-    // breakable Block
-    Block_src_rect2.x = 200;
-    Block_src_rect2.y = 43;
-    Block_src_rect2.w = UNIT_PIXEL;
-    Block_src_rect2.h = UNIT_PIXEL;
-    
-    // Base
-    Block_src_rect3.x = 278;
-    Block_src_rect3.y = 45;
-    Block_src_rect3.w = UNIT_PIXEL;
-    Block_src_rect3.h = UNIT_PIXEL;
+        // breakable Block
+        Block_src_rects[BLOCK_BREAKABLE].x = 200;
+        Block_src_rects[BLOCK_BREAKABLE].y = 43;
+        Block_src_rects[BLOCK_BREAKABLE].w = 30;
+        Block_src_rects[BLOCK_BREAKABLE].h = 30;
+        
+        // Base
+        Block_src_rects[BLOCK_SOIL].x = 278;
+        Block_src_rects[BLOCK_SOIL].y = 45;
+        Block_src_rects[BLOCK_SOIL].w = 30;
+        Block_src_rects[BLOCK_SOIL].h = 30;
 
-    // Thorn
-    Block_src_rect4.x = 45;
-    Block_src_rect4.y = 123;
-    Block_src_rect4.w = UNIT_PIXEL;
-    Block_src_rect4.h = UNIT_PIXEL;
+        // Thorn
+        Block_src_rects[BLOCK_THRON].x = 45;
+        Block_src_rects[BLOCK_THRON].y = 123;
+        Block_src_rects[BLOCK_THRON].w = 30;
+        Block_src_rects[BLOCK_THRON].h = 30;
 
-    // Mine
-    Block_src_rect5.x = 123;
-    Block_src_rect5.y = 123;
-    Block_src_rect5.w = UNIT_PIXEL;
-    Block_src_rect5.h = UNIT_PIXEL/2;
-    
-    // Black-Hole
-    Block_src_rect6.x = 200;
-    Block_src_rect6.y = 123;
-    Block_src_rect6.w = UNIT_PIXEL;
-    Block_src_rect6.h = UNIT_PIXEL;
-    
-    // Flag
-    Block_src_rect7.x = 278;
-    Block_src_rect7.y = 123;
-    Block_src_rect7.w = UNIT_PIXEL;
-    Block_src_rect7.h = UNIT_PIXEL;
-    
-    // Ending Black-Hole
-    Block_src_rect8.x = 200;
-    Block_src_rect8.y = 123;
-    Block_src_rect8.w = UNIT_PIXEL;
-    Block_src_rect8.h = UNIT_PIXEL;
-    
-    // Invisible Bolck
-    T_Block_src_rect9.x = 45;
-    T_Block_src_rect9.y = 45;
-    T_Block_src_rect9.w = UNIT_PIXEL;
-    T_Block_src_rect9.h = UNIT_PIXEL;
-    
+        // Mine
+        Block_src_rects[BLOCK_MINE].x = 123;
+        Block_src_rects[BLOCK_MINE].y = 123;
+        Block_src_rects[BLOCK_MINE].w = 30;
+        Block_src_rects[BLOCK_MINE].h = 30/2;
+        
+        // Black-Hole
+        Block_src_rects[BLOCK_BLACK_HOLE].x = 200;
+        Block_src_rects[BLOCK_BLACK_HOLE].y = 123;
+        Block_src_rects[BLOCK_BLACK_HOLE].w = 30;
+        Block_src_rects[BLOCK_BLACK_HOLE].h = 30;
+        
+        // Flag
+        Block_src_rects[BLOCK_FLAG].x = 278;
+        Block_src_rects[BLOCK_FLAG].y = 123;
+        Block_src_rects[BLOCK_FLAG].w = 30;
+        Block_src_rects[BLOCK_FLAG].h = 30;
+        
+        // Ending Black-Hole
+        Block_src_rects[BLOCK_BLACK_HOLE_GOAL].x = 200;
+        Block_src_rects[BLOCK_BLACK_HOLE_GOAL].y = 123;
+        Block_src_rects[BLOCK_BLACK_HOLE_GOAL].w = 30;
+        Block_src_rects[BLOCK_BLACK_HOLE_GOAL].h = 30;
+        
+        // Invisible Bolck
+        Block_src_rects[BLOCK_INVISIBLE].x = 45;
+        Block_src_rects[BLOCK_INVISIBLE].y = 45;
+        Block_src_rects[BLOCK_INVISIBLE].w = 30;
+        Block_src_rects[BLOCK_INVISIBLE].h = 30;
+    }
 }
-
 
 // 추가
 void init_message()
 {
-    Message = Load_Texture("../asset/image/clear_dead.png", Main_Window_Renderer, NULL, NULL);
+    Message_texture_WHOLE = Load_Texture("../asset/image/clear_dead.png", Main_Window_Renderer, NULL, NULL);
 
     // clear : 1
     Message_src_rect1.x = 27;
     Message_src_rect1.y = 33;
-    Message_src_rect1.w = UNIT_PIXEL * 23;
-    Message_src_rect1.h = UNIT_PIXEL * 2.6;
+    Message_src_rect1.w = 30 * 23;
+    Message_src_rect1.h = 30 * 2.6;
 
     // dead : 0
     Message_src_rect2.x = 27;
     Message_src_rect2.y = 140;
-    Message_src_rect2.w = UNIT_PIXEL * 23;
-    Message_src_rect2.h = UNIT_PIXEL * 2.6;
+    Message_src_rect2.w = 30 * 23;
+    Message_src_rect2.h = 30 * 2.6;
 }
 
 Map *Load_Map(int *head_of_data_arr, int arr_height, int arr_width)
@@ -189,56 +188,30 @@ void Render_Map(Map *map, SDL_Renderer *render, float global_x, float window_x)
                 // --------------------------------------------------------------------------------------------- //
                 dst_rect.y = i * map->Shrink_ratio + UNIT_PIXEL / 2;
 
-            switch (map->Map_data[i][j])                // data to render
-            {
-                case 0: break; // Not rendering for empty space
+                int block_index = map->Map_data[i][j];
 
-                case 1:
-                SDL_RenderCopyF(render, Block, &Block_src_rect1, &dst_rect);       // render Unbreakable Block
-                break;
-
-                case 2:
-                SDL_RenderCopyF(render, Block, &Block_src_rect2, &dst_rect);       // render breakable Block
-                break;
-
-                case 3:
-                SDL_RenderCopyF(render, Block, &Block_src_rect3, &dst_rect);       // render Base 
-                break;
-
-                case 4:
-                SDL_RenderCopyF(render, Block, &Block_src_rect4, &dst_rect);       // render Thorn
-                break;                        
-
-                case 5:
-                SDL_RenderCopyF(render, Block, &Block_src_rect5, &dst_rect);       // render Mine 
-                break;
-
-                case 6:
-                SDL_RenderCopyF(render, Block, &Block_src_rect6, &dst_rect);       // render Black-Hole
-                break;
-
-                case 7:
-                SDL_RenderCopyF(render, Block, &Block_src_rect7, &dst_rect);       // render Flag
-                break;
-
-                case 8:
-                SDL_RenderCopyF(render, Block, &Block_src_rect8, &dst_rect);       // render "Ending" Black-Hole
-                break;
-
-                case 9:
-                SDL_RenderCopyF(render, T_Block, &T_Block_src_rect9, &dst_rect);   // render Invisible Block
-                break;
-
-                default :           // unexpected block
-                fprintf(
-                    stderr, 
-                    "%s%s[Error] Unexpected block encoutnered.%s\n%s:%d\n", 
-                    ANSI_BOLD, ANSI_RED, ANSI_RESET, 
-                    __FILE__, __LINE__
-                );
-                fflush(stderr);
-                return;
-            }
+                if (InRange(block_index, 0, NUM_OF_BLOCK_KIND))
+                {
+                    if (block_index == BLOCK_INVISIBLE)
+                    {
+                        SDL_RenderCopyF(render, Block_texture_INVISIBLE, &Block_src_rects[block_index], &dst_rect);
+                    }
+                    else
+                    {
+                        SDL_RenderCopyF(render, Block_texture_WHOLE, &Block_src_rects[block_index], &dst_rect);
+                    }
+                }
+                else
+                {
+                    fprintf(
+                        stderr, 
+                        "%s%s[Error] Unexpected block encoutnered while rendering map.%s\n%s:%d\n", 
+                        ANSI_BOLD, ANSI_RED, ANSI_RESET, 
+                        __FILE__, __LINE__
+                    );
+                    fflush(stderr);
+                    return;
+                }
         }
     }
 }
@@ -267,11 +240,11 @@ void Render_Message(SDL_Renderer *render, float WindowPos_x, float WindowPos_y)
 
     if (Condition == 1)      {
         printf("true\n");
-        SDL_RenderCopyF(render, Message, &Message_src_rect1, &dst_rect_message);
+        SDL_RenderCopyF(render, Message_texture_WHOLE, &Message_src_rect1, &dst_rect_message);
     } // clear : 1
     else if (Condition == 0) {
         printf("False\n");
-        SDL_RenderCopyF(render, Message, &Message_src_rect2, &dst_rect_message);
+        SDL_RenderCopyF(render, Message_texture_WHOLE, &Message_src_rect2, &dst_rect_message);
     } // dead : 0
 }
 
