@@ -172,10 +172,8 @@ void Receive_Keyboard_input(Player *character, Map *map, SDL_Event *event, bool 
     {
         // window was closed, set `quit_flag` if possible
         if (event->type == SDL_QUIT && quit_flag)   {*quit_flag = true;}
-        // record keyboard state in character
-        else if (character->is_dead == false)    {
-            Record_KeyState(&character->Key, event);
-        }
+        // record keyboard state in character when it's not dead
+        else if (!character->is_dead)               {Record_KeyState(&character->Key, event);}
     }
 
     // both left & right key were pressed
@@ -324,19 +322,157 @@ void Move_Player(Player *character)
     else                            {character->Current_state = NORMAL;}    // stand still
 }
 
-void Apply_physics(Player *character, Map *map)
+void Apply_Block_Interruption(Player *character, Map *map)
 {
     if (!character || !map || !map->Map_data)   {return;}       // invalid argument
 
-    // pull out values for convenience
-    float global_x = character->GlobalPos_x;
-    float global_y = character->GlobalPos_y;
+    if (character->GlobalPos_y > WIN_HEIGHT)    {return;}       // no need to interrupt player, since there's no block out of the window
 
-    // the indexes of interest
-    int index_x = Round(global_x / map->Shrink_ratio);
-    int index_y = Round(global_y / map->Shrink_ratio);
+    // the map index where player exists
+    int index_x = Round(character->GlobalPos_x / map->Shrink_ratio);
+    int index_y = Round(character->GlobalPos_y / map->Shrink_ratio);
 
-    if (index_y < 0)        {return;}                   // no need to apply physics to upper(?) region
+    // global position of player's left & right side
+    float character_lside_pos = character->GlobalPos_x - UNIT_PIXEL / 2 + 1;
+    float character_rside_pos = character->GlobalPos_x + UNIT_PIXEL / 2 - 1;
+
+/*
+//      [up left]       [up block]      [up right]
+//      [left block]    [Character]     [right block]
+//      [down left]     [down block]    [down right]
+*/
+
+    // up blocks
+    int index_up_y = index_y - 1;
+    int index_up_left_x = Round(character_lside_pos / map->Shrink_ratio);
+    int index_up_left_y = index_up_y;
+    int index_up_right_x = Round(character_rside_pos / map->Shrink_ratio);
+    int index_up_right_y = index_up_y;
+
+    // down blocks
+    int index_down_y = index_y + 1;
+    int index_down_left_x = Round(character_lside_pos / map->Shrink_ratio);
+    int index_down_left_y = index_down_y;
+    int index_down_right_x = Round(character_rside_pos / map->Shrink_ratio);
+    int index_down_right_y = index_down_y;
+
+    // left block
+    int index_left_x = Round(character_lside_pos / map->Shrink_ratio);
+    int index_left_y = index_y;
+
+    // right block
+    int index_right_x = Round(character_rside_pos / map->Shrink_ratio);
+    int index_right_y = index_y;
+
+    // map data
+    int block;
+
+    if (InRange(index_up_y, 0, map->Arr_Height - 1))            // if upper block index is proper
+    {
+        if (InRange(index_up_left_x, 0, map->Arr_Width - 1))    // upper left block
+        {
+            block = map->Map_data[index_up_left_y][index_up_left_x];    // load map data
+            if (
+                (block == BLOCK_UNBREAKABLE || block == BLOCK_SOIL || block == BLOCK_INVISIBLE)     // if player encountered impassible block,
+                && character->Speed_y > 0                       // & if player has [+y] speed
+            )
+            {   // stop player & adjust coordinates
+                character->Speed_y = 0;
+                character->GlobalPos_y = (index_up_y + 1) * map->Shrink_ratio;
+                character->WindowPos_y = (index_up_y + 1) * map->Shrink_ratio;
+            }
+        }
+
+        if (InRange(index_up_right_x, 0, map->Arr_Width - 1))   // upper right block
+        {
+            block = map->Map_data[index_up_right_y][index_up_right_x];  // load map data
+            if (
+                (block == BLOCK_UNBREAKABLE || block == BLOCK_SOIL || block == BLOCK_INVISIBLE)     // if player encountered impassible block,
+                && character->Speed_y > 0                       // & if player has [+y] speed
+            )
+            {   // stop player & adjust coordinates
+                character->Speed_y = 0;
+                character->GlobalPos_y = (index_up_y + 1) * map->Shrink_ratio;
+                character->WindowPos_y = (index_up_y + 1) * map->Shrink_ratio;
+            }
+        }
+    }
+
+    if (InRange(index_down_y, 0, map->Arr_Height - 1))          // if lower block index is proper
+    {
+        if (InRange(index_down_left_x, 0, map->Arr_Width - 1))  // lower left block 
+        {
+            block = map->Map_data[index_down_left_y][index_down_left_x];    // load map data
+            if (
+                (block == BLOCK_UNBREAKABLE || block == BLOCK_SOIL          // if player encountered impassible block,
+                || block == BLOCK_INVISIBLE || block == BLOCK_BREAKABLE) 
+                && character->Speed_y < 0                   // & if player has [-y] speed
+            )
+            {   // stop player & adjust coordinates
+                character->Speed_y = 0;
+                character->GlobalPos_y = (index_down_y - 1) * map->Shrink_ratio;
+                character->WindowPos_y = (index_down_y - 1) * map->Shrink_ratio;
+            }
+        }
+
+        if (InRange(index_down_right_x, 0, map->Arr_Width - 1)) // lower right block 
+        {
+            block = map->Map_data[index_down_right_y][index_down_right_x];  // load map data
+            if (
+                (block == BLOCK_UNBREAKABLE || block == BLOCK_SOIL 
+                || block == BLOCK_INVISIBLE || block == BLOCK_BREAKABLE)    // if player encountered impassible block,
+                && character->Speed_y < 0
+            )
+            {   // stop player & adjust coordinates
+                character->Speed_y = 0;
+                character->GlobalPos_y = (index_down_y - 1) * map->Shrink_ratio;
+                character->WindowPos_y = (index_down_y - 1) * map->Shrink_ratio;
+            }
+        }
+    }
+
+    if (                                                            // if left block index is proper
+        InRange(index_left_x, 0, map->Arr_Width - 1) 
+        && InRange(index_left_y, 0, map->Arr_Height - 1)
+    )
+    {
+        block = map->Map_data[index_left_y][index_left_x];          // load map data
+        if (
+            (block == BLOCK_UNBREAKABLE || block == BLOCK_BREAKABLE     // if player encountered impassible block,
+            || block == BLOCK_SOIL || block == BLOCK_INVISIBLE)
+            && character->Speed_x < 0                                   // & if player has [-x] speed
+        )
+        {   // stop player
+            character->Speed_x = 0;
+        }
+    }
+
+    if (                                                            // if right block index is proper
+        InRange(index_right_x, 0, map->Arr_Width - 1) 
+        && InRange(index_right_y, 0, map->Arr_Height - 1)
+    )  
+    {
+        block = map->Map_data[index_right_y][index_right_x];        // load map data
+        if (
+            (block == BLOCK_UNBREAKABLE || block == BLOCK_BREAKABLE     // if player encountered impassible block,
+            || block == BLOCK_SOIL || block == BLOCK_INVISIBLE)
+            && character->Speed_x > 0                                   // & if player has [+x] speed
+        )
+        {   // stop player
+            character->Speed_x = 0;
+        }
+    }
+}
+
+void Apply_Block_Object_logic(Player *character, Map *map)
+{
+    if (!character || !map || !map->Map_data)   {return;}       // invalid argument
+
+    // the map index where player exists
+    int index_x = Round(character->GlobalPos_x / map->Shrink_ratio);
+    int index_y = Round(character->GlobalPos_y / map->Shrink_ratio);
+
+    if (index_y < 0)        {return;}                   // no need to interrupt player, since there's no block out of the window
     if (                                                // calculated index is out of range to map data
         (index_x < 0 || index_x >= map->Arr_Width)
         || (index_y >= map->Arr_Height) 
@@ -344,208 +480,42 @@ void Apply_physics(Player *character, Map *map)
     {
         // shows error & abort
         fprintf(
-            stderr, "%s%s[Error] Unexpected error occured while applying Map physics to chracter.%s\n%s:%d\n", 
+            stderr, "%s%s[Error] Unexpected error occured while applying Map physics to character.%s\n%s:%d\n", 
             ANSI_BOLD, ANSI_RED, ANSI_RESET,
             __FILE__, __LINE__
         );
         fflush(stderr);
         return;
     }
-    
 
-/*
-//                      [upper block]
-//      [left block]    [Character]     [right block]
-//                      [lower block]
-*/
-
-    // index of upper block
-    int index_up_x = index_x;
-    int index_up_y = index_y - 1;
-
-    // index of lower block
-    int index_down_x = index_x;
-    int index_down_y = index_y + 1;
-
-    // index of left block
-    int index_left_x = index_x - 1;
-    int index_left_y = index_y;
-
-    // index of right block
-    int index_right_x = index_x + 1;
-    int index_right_y = index_y;
-
-    if (index_up_y > 0)        // if upper block index is proper & block exists,
+    if (index_y > 0)
     {
-        int block_up = map->Map_data[index_up_y][index_up_x];
-        if (block_up != 0 && block_up != 4 && block_up != 5 && block_up != 6)
+        int block_up = map->Map_data[index_y - 1][index_x];
+
+        if (block_up == BLOCK_BREAKABLE && character->Speed_y > 0)
         {
-            if (character->Speed_y > 0)         // & if `character` has [+y] velocity,
-            {
-                character->Speed_y = 0;         // set [y] velocity as `zero`
-                // and adjust it's position, preventing "Slip out"
-                // both global & window (relative) position
-                character->GlobalPos_y = (index_up_y + 1) * map->Shrink_ratio;
-                character->WindowPos_y = (index_up_y + 1) * map->Shrink_ratio;
-            }
-        }
-    }
-
-    if (index_down_y < map->Arr_Height)    // if lower block index is proper & block exists,
-    {
-        int block_down = map->Map_data[index_down_y][index_down_x];
-        if (block_down != 0 && block_down != 4 && block_down != 5 && block_down != 6)
-        {
-            if (character->Speed_y < 0)         // & if `character` has [+y] velocity,
-            {
-                character->Speed_y = 0;         // set [y] velocity as `zero`
-                // and adjust it's position, preventing "Slip out"
-                // both global & window (relative) position
-                character->GlobalPos_y = (index_down_y - 1) * map->Shrink_ratio;
-                character->WindowPos_y = (index_down_y - 1) * map->Shrink_ratio;
-            }
-        }
-    }
-
-    if (index_left_x > 0)                  // if left block index is proper & block exists,
-    {
-        int block_left = map->Map_data[index_left_y][index_left_x];
-        if (block_left != 0 && block_left != 4 && block_left != 5 && block_left != 6)
-        {
-            if (character->Speed_x < 0)
-            {
-                character->Speed_x = 0;     // set [x] velocity as `zero`
-                // and adjust it's position, preventing "Slip out"
-                // both global & window (relative) position
-                character->GlobalPos_x = (index_left_x + 1) * map->Shrink_ratio;
-                character->WindowPos_x = (index_left_x + 1) * map->Shrink_ratio;
-            }
-        }
-    }
-
-    if (index_right_x < map->Arr_Width)  // if right block index is proper & block exists,
-    {
-        int block_right = map->Map_data[index_right_y][index_right_x];
-        if (block_right != 0 && block_right != 4 && block_right != 5 && block_right != 6)
-        {
-            if (character->Speed_x > 0)
-            {
-                character->Speed_x = 0;     // set [x] velocity as `zero`
-                // and adjust it's position, preventing "Slip out"
-                // both global & window (relative) position
-                character->GlobalPos_x = (index_right_x - 1) * map->Shrink_ratio;
-                character->WindowPos_x = (index_right_x - 1) * map->Shrink_ratio;
-            }
-        }
-    }
-}
-
-// 추가
-void Apply_Block_Player_physics(Player *character, Map *map)
-{
-    // pull out values for convenience
-    float global_x = character->GlobalPos_x;
-    float global_y = character->GlobalPos_y;
-
-    // the indexes of interest
-    int index_x = Round(global_x / map->Shrink_ratio);
-    int index_y = Round(global_y / map->Shrink_ratio);
-
-    if (index_x < 0 || index_x > map->Arr_Width)    {return;}
-    else if (index_y < 0 || index_y > map->Arr_Height)  {return;}
-
-    // index of upper block
-    int index_up_x = index_x;
-    int index_up_y = index_y - 1;
-
-    // index of lower block
-    int index_down_x = index_x;
-    int index_down_y = index_y + 1;
-
-    // index of left block
-    int index_left_x = index_x - 1;
-    int index_left_y = index_y;
-
-    // index of right block
-    int index_right_x = index_x + 1;
-    int index_right_y = index_y;
-
-    if (index_up_y > 0)        // if upper block index is proper & block exists,
-    {
-        int block_up = map->Map_data[index_up_y][index_up_x];
-        if (block_up == 2 && character->Speed_y > 0)
-        {
-            map->Map_data[index_up_y][index_up_x] = 0;
+            map->Map_data[index_y - 1][index_x] = BLOCK_EMPTY;
             character->Speed_y = 0;
         }
     }
 
-    if (index_up_y > 0 && index_down_x < map->Arr_Height &&
-        index_left_x > 0 && index_right_x < map->Arr_Width)        // if upper block index is proper & block exists,
+    int block = map->Map_data[index_y][index_x];
+
+    if (block == BLOCK_THRON || block == BLOCK_MINE || block == BLOCK_BLACK_HOLE)
     {
-        int block_up = map->Map_data[index_up_y][index_up_x];
-        int block_down = map->Map_data[index_down_y][index_down_x];
-        int block_right = map->Map_data[index_right_y][index_right_x];
-        int block_left = map->Map_data[index_left_y][index_left_x];
-
-        if ((block_up == 7 && character->Speed_y > 0)) 
-        {
-            map->Map_data[index_up_y][index_up_x] = 0;
-            map->Map_data[6][5] = 8;
-        }
-        else if ((block_down == 7 && character->Speed_y < 0)) 
-        {
-            map->Map_data[index_down_y][index_down_x] = 0;
-            map->Map_data[6][5] = 8;
-        }
-        else if ((block_right == 7 && character->Speed_x > 0)) 
-        {
-            map->Map_data[index_right_y][index_right_x] = 0;
-            map->Map_data[6][5] = 8;
-        }
-        else if ((block_left == 7 && character->Speed_x < 0)) 
-        {
-            map->Map_data[index_left_y][index_left_x] = 0;
-            map->Map_data[6][5] = 8;
-        }
-
-        else if ((block_up == 8 && character->Speed_y > 0)) 
-        {
-            Condition = 1;
-        }
-        else if ((block_down == 8 && character->Speed_y < 0)) 
-        {
-            Condition = 1;
-        }
-        else if ((block_right == 8 && character->Speed_x > 0)) 
-        {
-            Condition = 1;
-        }
-        else if ((block_left == 8 && character->Speed_x < 0)) 
-        {
-            Condition = 1;
-        }
-    }
-
-    int block_data = map->Map_data[index_y][index_x];
-
-    if (block_data == 4 || block_data == 5 || block_data == 6)
-    {
-        Condition = 0;
         character->is_dead = true;
-
-        character->Speed_y = 0;
-        character->Speed_x = 0;
-        character->GlobalPos_y = index_y * map->Shrink_ratio;
-        character->GlobalPos_x = index_x * map->Shrink_ratio;
-        character->WindowPos_y = index_y * map->Shrink_ratio;
-        character->WindowPos_x = index_x * map->Shrink_ratio;
+        Stop_Player(character);
+        Condition = 0;
     }
-    else if (block_data == 8)
+    else if (block == BLOCK_FLAG)
+    {
+        map->Map_data[TEST_GOAL_POS_Y][TEST_GOAL_POS_X] = BLOCK_BLACK_HOLE_GOAL;
+        map->Map_data[index_y][index_x] = BLOCK_EMPTY;
+    }
+    else if (block == BLOCK_BLACK_HOLE_GOAL)
     {
         Condition = 1;
     }
-
 }
 
 void Render_Player(Player *character, SDL_Renderer *render)
@@ -569,13 +539,6 @@ void dispose_player(Player *character)
         // good to dispose
         if (character->Tex)     {SDL_DestroyTexture(character->Tex);}   // free texture
         character->Tex = NULL;
-
-        // for (int i = 0; i < NUM_OF_PLAYER_STATE; i++)       // free allocated array
-        // {
-        //     if (character->Src_rect[i])     {free(character->Src_rect[i]);}
-        //     character->Src_rect[i] = NULL;
-        // }
-        
         free(character);    // free allocated memory
     }
 }
