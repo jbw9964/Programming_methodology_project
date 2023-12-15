@@ -10,6 +10,7 @@
 # include <SDL2/SDL_image.h>
 
 # include "../def.h"
+# include "../Init/Map.h"
 
 # define Round(fnum)    ((fnum) - (int) (fnum) >= 0.5 ? (int) (fnum + 1) : (int) (fnum))
 
@@ -17,15 +18,16 @@
 /**
  * @brief   The state that `Player` can have.
  *  
- * @param   `NORMAL`    standing still
- * @param   `JUMP`      while hover
- * @param   `RUN`       while moving on ground
+ * @param   `LEFT`    player is moving to left
+ * @param   `RIGHT`   player is moving to right
+ * @param   `DEATH`   player is dead
  */
 typedef enum Player_State
 {
-    NORMAL,
-    JUMP,
-    RUN
+    LEFT,
+    RIGHT,
+    DEATH_LEFT,
+    DEATH_RIGHT
 } Player_State;
 
 /**
@@ -34,7 +36,7 @@ typedef enum Player_State
 */
 typedef struct Keyboard
 {
-    bool Up, Down, Left, Right;
+    bool Up, Down, Left, Right, Restart;
 } Keyboard;
 
 /**
@@ -63,9 +65,8 @@ typedef struct Player
     float Speed_x;
     float Speed_y;
     bool is_dead;
+    bool is_clear;
 } Player;
-
-# include "../Init/Map.h"
 
 /*
  * @brief   Create `Player` structure with given arguments.
