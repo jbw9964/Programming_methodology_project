@@ -93,8 +93,8 @@ void dispose_enemy(Enemy_Object *enemy);
 
 extern SDL_Texture *Load_Texture(char *path, SDL_Renderer *render, int *w, int *h);
 
-Enemy_Object *test_enemy;
-Enemy_Object *test_enemy_2;
+Enemy_Object *Enemy_arr_stage_1[NUM_OF_ENEMYS_STAGE_1];
+
 extern SDL_Renderer *Main_Window_Renderer;
 
 # endif

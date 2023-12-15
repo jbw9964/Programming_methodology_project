@@ -7,30 +7,115 @@
 // temporary function to test
 void init_enemy()
 {
-    test_enemy = Create_Enemy_Object("../asset/image/enemy.png", Main_Window_Renderer, 750, 210);
-    test_enemy_2 = Create_Enemy_Object("../asset/image/enemy.png", Main_Window_Renderer, 5 * 30, 210);
+    SDL_Rect *src_rects_1[NUM_OF_ENEMY_DIRECTION];
+    src_rects_1[ENEMY_LEFT] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
+    src_rects_1[ENEMY_LEFT]->x = 120;
+    src_rects_1[ENEMY_LEFT]->y = 30;
+    src_rects_1[ENEMY_LEFT]->w = 45;
+    src_rects_1[ENEMY_LEFT]->h = 45;
 
-    SDL_Rect *src_rects[NUM_OF_ENEMY_DIRECTION];
+    src_rects_1[ENEMY_RIGHT] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
+    src_rects_1[ENEMY_RIGHT]->x = 200;
+    src_rects_1[ENEMY_RIGHT]->y = 30;
+    src_rects_1[ENEMY_RIGHT]->w = 45;
+    src_rects_1[ENEMY_RIGHT]->h = 45;
 
-    src_rects[ENEMY_LEFT] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
-    src_rects[ENEMY_LEFT]->x = 30;
-    src_rects[ENEMY_LEFT]->y = 30;
-    src_rects[ENEMY_LEFT]->w = 30;
-    src_rects[ENEMY_LEFT]->h = 30;
+    SDL_Rect *src_rects_2[NUM_OF_ENEMY_DIRECTION];
 
-    src_rects[ENEMY_RIGHT] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
-    src_rects[ENEMY_RIGHT]->x = 60;
-    src_rects[ENEMY_RIGHT]->y = 30;
-    src_rects[ENEMY_RIGHT]->w = 30;
-    src_rects[ENEMY_RIGHT]->h = 30;
+    src_rects_2[ENEMY_LEFT] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
+    src_rects_2[ENEMY_LEFT]->x = 30;
+    src_rects_2[ENEMY_LEFT]->y = 30;
+    src_rects_2[ENEMY_LEFT]->w = 45;
+    src_rects_2[ENEMY_LEFT]->h = 45;
 
-    Assign_Enemy_Rect(test_enemy, src_rects);
-    Assign_Enemy_Rect(test_enemy_2, src_rects);
+    src_rects_2[ENEMY_RIGHT] = (SDL_Rect *) malloc(sizeof(SDL_Rect));
+    src_rects_2[ENEMY_RIGHT]->x = 30;
+    src_rects_2[ENEMY_RIGHT]->y = 30;
+    src_rects_2[ENEMY_RIGHT]->w = 45;
+    src_rects_2[ENEMY_RIGHT]->h = 45;
+
+    int i;
+    for (i = 0; i < NUM_OF_ENEMYS_STAGE_1; i++)
+    {
+        Enemy_arr_stage_1[i] = Create_Enemy_Object("../asset/image/enemy.png", Main_Window_Renderer, 0, 0);
+    }
+    for (i = 0; i < NUM_OF_ENEMYS_STAGE_1 / 2; i++)
+    {
+        Assign_Enemy_Rect(Enemy_arr_stage_1[i], src_rects_1);
+    }
+    for (; i < NUM_OF_ENEMYS_STAGE_1; i++)
+    {
+        Assign_Enemy_Rect(Enemy_arr_stage_1[i], src_rects_2);
+    }
+
+    {
+        Enemy_arr_stage_1[0]->GlobalPos_x = 80;
+        Enemy_arr_stage_1[0]->GlobalPos_y = 420;
+
+        Enemy_arr_stage_1[1]->GlobalPos_x = 145;
+        Enemy_arr_stage_1[1]->GlobalPos_y = 60;
+
+        Enemy_arr_stage_1[2]->GlobalPos_x = 510;
+        Enemy_arr_stage_1[2]->GlobalPos_y = 420;
+
+        Enemy_arr_stage_1[3]->GlobalPos_x = 600;
+        Enemy_arr_stage_1[3]->GlobalPos_y = 270;
+
+        Enemy_arr_stage_1[4]->GlobalPos_x = 505;
+        Enemy_arr_stage_1[4]->GlobalPos_y = 90;
+
+        Enemy_arr_stage_1[5]->GlobalPos_x = 675;
+        Enemy_arr_stage_1[5]->GlobalPos_y = 150;
+
+        Enemy_arr_stage_1[6]->GlobalPos_x = 945;
+        Enemy_arr_stage_1[6]->GlobalPos_y = 150;
+
+        Enemy_arr_stage_1[7]->GlobalPos_x = 1005;
+        Enemy_arr_stage_1[7]->GlobalPos_y = 270;
+
+        Enemy_arr_stage_1[8]->GlobalPos_x = 1135;
+        Enemy_arr_stage_1[8]->GlobalPos_y = 420;
+
+        Enemy_arr_stage_1[9]->GlobalPos_x = 1410;
+        Enemy_arr_stage_1[9]->GlobalPos_y = 150;
+
+        Enemy_arr_stage_1[10]->GlobalPos_x = 1610;
+        Enemy_arr_stage_1[10]->GlobalPos_y = 420;
+
+        Enemy_arr_stage_1[11]->GlobalPos_x = 1805;
+        Enemy_arr_stage_1[11]->GlobalPos_y = 420;
+
+        Enemy_arr_stage_1[12]->GlobalPos_x = 1975;
+        Enemy_arr_stage_1[12]->GlobalPos_y = 90;
+
+        Enemy_arr_stage_1[13]->GlobalPos_x = 2100;
+        Enemy_arr_stage_1[13]->GlobalPos_y = 420;
+
+        Enemy_arr_stage_1[14]->GlobalPos_x = 2240;
+        Enemy_arr_stage_1[14]->GlobalPos_y = 420;
+
+        Enemy_arr_stage_1[15]->GlobalPos_x = 2400;
+        Enemy_arr_stage_1[15]->GlobalPos_y = 420;
+
+        Enemy_arr_stage_1[16]->GlobalPos_x = 2365;
+        Enemy_arr_stage_1[16]->GlobalPos_y = 330;
+
+        Enemy_arr_stage_1[17]->GlobalPos_x = 2610;
+        Enemy_arr_stage_1[17]->GlobalPos_y = 420;
+
+        Enemy_arr_stage_1[18]->GlobalPos_x = 2850;
+        Enemy_arr_stage_1[18]->GlobalPos_y = 300;
+
+        Enemy_arr_stage_1[19]->GlobalPos_x = 2860;
+        Enemy_arr_stage_1[19]->GlobalPos_y = 60;
+    }
 
     for (int i = 0; i < NUM_OF_ENEMY_DIRECTION; i++)
     {
-        free(src_rects[i]);
-        src_rects[i] = NULL;
+        free(src_rects_1[i]);
+        free(src_rects_2[i]);
+        src_rects_1[i] = NULL;
+        src_rects_2[i] = NULL;
     }
 }
 
@@ -260,15 +345,15 @@ void Apply_Enemy_Player_physics(Player *character, Enemy_Object *enemy)
 
     // coordinate of character
     SDL_FRect char_rect = {
-        character->GlobalPos_x,
-        character->GlobalPos_y,
+        character->GlobalPos_x - UNIT_PIXEL / 2,
+        character->GlobalPos_y - UNIT_PIXEL / 2,
         UNIT_PIXEL, UNIT_PIXEL
     };
 
     // coordinate of enemy
     SDL_FRect enemy_rect = {
-        enemy->GlobalPos_x,
-        enemy->GlobalPos_y,
+        enemy->GlobalPos_x - UNIT_PIXEL / 2,
+        enemy->GlobalPos_y - UNIT_PIXEL / 2,
         UNIT_PIXEL, UNIT_PIXEL
     };
 
