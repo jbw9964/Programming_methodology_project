@@ -156,10 +156,6 @@ void Render_Player(Player *character, SDL_Renderer *render);
 // @brief   Free allocated memory assigned to `character`.
 void dispose_player(Player *character);
 
-// 추가--------------------------------------------------------------
-int Condition = 2; // 1 : Clear  0 : Dead
-//-------------------------------------------------------------------
-
 extern SDL_Texture *Load_Texture(char *path, SDL_Renderer *render, int *w, int *h);
 
 # endif

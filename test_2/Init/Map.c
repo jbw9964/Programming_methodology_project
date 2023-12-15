@@ -130,38 +130,6 @@ void Render_Map(Map *map, SDL_Renderer *render, float global_x, float window_x)
     }
 }
 
-// 추가
-void Render_Message(SDL_Renderer *render, float WindowPos_x, float WindowPos_y)
-{
-    if (!render)      // invalid argument
-    {
-        // show error
-        fprintf(
-            stderr, "%s%s[Error] Failed to open message. Message must be initialized.%s\n%s:%d\n", 
-            ANSI_BOLD, ANSI_RED, ANSI_RESET,
-            __FILE__, __LINE__
-        );
-        fflush(stderr);
-        return;
-    }
-
-    // the destination to render
-    SDL_FRect dst_rect_message;             // using float-rectangle
-    dst_rect_message.x = 20;
-    dst_rect_message.y = WindowPos_y;
-    dst_rect_message.w = WIN_WIDTH;
-    dst_rect_message.h = UNIT_PIXEL * 2.6;
-
-    if (Condition == 1)      {
-        printf("true\n");
-        SDL_RenderCopyF(render, Message_texture_WHOLE, &Message_src_rect1, &dst_rect_message);
-    } // clear : 1
-    else if (Condition == 0) {
-        printf("False\n");
-        SDL_RenderCopyF(render, Message_texture_WHOLE, &Message_src_rect2, &dst_rect_message);
-    } // dead : 0
-}
-
 void dispose_map(Map *map)
 {
     if (map)                // good to free memory
