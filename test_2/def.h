@@ -71,6 +71,8 @@
     # define ENEMY_MAX_SPEED_Y          MAX_SPEED_Y         // maximum speed that enemy can have
     # define NUM_OF_ENEMY_DIRECTION     2                   // number of direction that enemy can have
 
+    # define NUM_OF_ENEMYS_STAGE_1      20
+
 
 // <main.h>
     # define WIN_WIDTH      690             // width of window that will be shown to user
