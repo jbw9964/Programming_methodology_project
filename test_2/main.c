@@ -12,6 +12,8 @@ int main()
     Init_map();
     Init_player();
 
+    init_enemy();
+
     bool quit_flag = false;
     SDL_Event event;
 
@@ -21,7 +23,18 @@ int main()
         SDL_RenderClear(Main_Window_Renderer);
 
         Receive_Keyboard_input(Character, Stage_1, &event, &quit_flag);
+
+        for (int i = 0; i < NUM_OF_ENEMYS_STAGE_1; i++)
+        {
+            Apply_Enemy_Player_physics(Character, Enemy_arr_stage_1[i]);
+            Patrol_Enemy(Enemy_arr_stage_1[i], Stage_1);
+        }
+
         Act_player();
+        for (int i = 0; i < NUM_OF_ENEMYS_STAGE_1; i++)
+        {
+            Render_Enemy(Enemy_arr_stage_1[i], Main_Window_Renderer, Character->GlobalPos_x, Character->WindowPos_x);
+        }
         Render();
 
         Uint64 end = SDL_GetTicks();
