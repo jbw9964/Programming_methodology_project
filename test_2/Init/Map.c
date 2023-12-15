@@ -3,93 +3,6 @@
 # define __MAP__C
 
 # include "./Map.h"
-# include "../GameObject/Player.h" //추가
-
-
-// temporary function to load block texture
-void init_block()
-{
-    Block_texture_WHOLE = Load_Texture("../asset/image/block2.png", Main_Window_Renderer, NULL, NULL);
-
-    // Texture Loading for Invisible Block
-    Block_texture_INVISIBLE = Load_Texture("../asset/image/block2.png", Main_Window_Renderer, NULL, NULL);
-    // Invisible Block's Alpha modulating
-    SDL_SetTextureAlphaMod(Block_texture_INVISIBLE, 16); 
-
-    {   // assign rectangular coordinates to each block
-        // Unbreakable Block
-        Block_src_rects[BLOCK_UNBREAKABLE].x = 123;
-        Block_src_rects[BLOCK_UNBREAKABLE].y = 45;
-        Block_src_rects[BLOCK_UNBREAKABLE].w = 30;
-        Block_src_rects[BLOCK_UNBREAKABLE].h = 30;
-
-        // breakable Block
-        Block_src_rects[BLOCK_BREAKABLE].x = 200;
-        Block_src_rects[BLOCK_BREAKABLE].y = 43;
-        Block_src_rects[BLOCK_BREAKABLE].w = 30;
-        Block_src_rects[BLOCK_BREAKABLE].h = 30;
-        
-        // Base
-        Block_src_rects[BLOCK_SOIL].x = 278;
-        Block_src_rects[BLOCK_SOIL].y = 45;
-        Block_src_rects[BLOCK_SOIL].w = 30;
-        Block_src_rects[BLOCK_SOIL].h = 30;
-
-        // Thorn
-        Block_src_rects[BLOCK_THRON].x = 45;
-        Block_src_rects[BLOCK_THRON].y = 123;
-        Block_src_rects[BLOCK_THRON].w = 30;
-        Block_src_rects[BLOCK_THRON].h = 30;
-
-        // Mine
-        Block_src_rects[BLOCK_MINE].x = 123;
-        Block_src_rects[BLOCK_MINE].y = 123;
-        Block_src_rects[BLOCK_MINE].w = 30;
-        Block_src_rects[BLOCK_MINE].h = 30/2;
-        
-        // Black-Hole
-        Block_src_rects[BLOCK_BLACK_HOLE].x = 200;
-        Block_src_rects[BLOCK_BLACK_HOLE].y = 123;
-        Block_src_rects[BLOCK_BLACK_HOLE].w = 30;
-        Block_src_rects[BLOCK_BLACK_HOLE].h = 30;
-        
-        // Flag
-        Block_src_rects[BLOCK_FLAG].x = 278;
-        Block_src_rects[BLOCK_FLAG].y = 123;
-        Block_src_rects[BLOCK_FLAG].w = 30;
-        Block_src_rects[BLOCK_FLAG].h = 30;
-        
-        // Ending Black-Hole
-        Block_src_rects[BLOCK_BLACK_HOLE_GOAL].x = 200;
-        Block_src_rects[BLOCK_BLACK_HOLE_GOAL].y = 123;
-        Block_src_rects[BLOCK_BLACK_HOLE_GOAL].w = 30;
-        Block_src_rects[BLOCK_BLACK_HOLE_GOAL].h = 30;
-        
-        // Invisible Bolck
-        Block_src_rects[BLOCK_INVISIBLE].x = 45;
-        Block_src_rects[BLOCK_INVISIBLE].y = 45;
-        Block_src_rects[BLOCK_INVISIBLE].w = 30;
-        Block_src_rects[BLOCK_INVISIBLE].h = 30;
-    }
-}
-
-// 추가
-void init_message()
-{
-    Message_texture_WHOLE = Load_Texture("../asset/image/clear_dead.png", Main_Window_Renderer, NULL, NULL);
-
-    // clear : 1
-    Message_src_rect1.x = 27;
-    Message_src_rect1.y = 33;
-    Message_src_rect1.w = 30 * 23;
-    Message_src_rect1.h = 30 * 2.6;
-
-    // dead : 0
-    Message_src_rect2.x = 27;
-    Message_src_rect2.y = 140;
-    Message_src_rect2.w = 30 * 23;
-    Message_src_rect2.h = 30 * 2.6;
-}
 
 Map *Load_Map(int *head_of_data_arr, int arr_height, int arr_width)
 {
@@ -263,6 +176,7 @@ void dispose_map(Map *map)
             map->Map_data = NULL;
         }
         free(map);          // free allocated memory
+        map = NULL;
     }
 }
 

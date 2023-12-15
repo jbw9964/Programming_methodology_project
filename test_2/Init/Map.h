@@ -10,14 +10,7 @@
 
 # include "../def.h"
 
-# define TEST_MAP_WIDTH             105
-# define TEST_MAP_HEIGHT            16
-# define TEST_MAP_SHRINK_RATIO      30
-
-# define TEST_GOAL_POS_X            5
-# define TEST_GOAL_POS_Y            6
-
-int TestMap[TEST_MAP_HEIGHT][TEST_MAP_WIDTH] = {
+int Stage_1_Map[STAGE_1_COL][STAGE_1_ROW] = {
     { 1,0,0,0,0,0,0,0,0,0, 0,0,1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,9,0,0,0,0,0, 0,0,9,0,0,0,0,0,0,0, 0,0,0,0,9,0,0,0,0,0, 1,1,1,1,1,0,0,0,0,0, 0,0,0,0,0,9,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,1,0,0,0,0,0,0,0,0, 0,2,2,2,1},
     { 1,0,0,0,0,0,0,0,0,0, 0,0,1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,9,0,0,0,0,0, 0,0,9,0,0,0,0,0,0,0, 0,0,0,0,9,0,0,0,0,0, 0,1,1,1,1,0,0,0,0,0, 0,0,0,0,0,9,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,1,0,0,0,0,0,0,0,0, 0,2,7,2,1},
     { 1,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,9,1,0,0,0,0, 0,0,9,0,0,0,0,0,0,0, 0,0,0,0,9,0,0,0,1,0, 0,0,1,1,1,0,0,0,0,0, 0,5,0,5,0,9,0,0,0,0, 0,0,0,1,1,1,1,1,1,0, 0,1,0,0,0,0,0,0,0,0, 0,2,0,2,1},
@@ -91,9 +84,6 @@ Map *Load_Map(int *head_of_data_arr, int arr_height, int arr_width);
  * * @warning Either `map` or `render` wasn't initialized, it will shows error.
  */
 void Render_Map(Map *map, SDL_Renderer *render, float global_x, float window_x);
-
-// 추가
-void Render_Message(SDL_Renderer *render, float WindowPos_x, float WindowPos_y);
 
 // @brief   Free allocated memory assigned to `map`.
 void dispose_map(Map *map);
