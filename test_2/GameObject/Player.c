@@ -43,7 +43,7 @@ Player *Create_Player(char *path, SDL_Renderer *render)
     else            // succeed to allocate memory
     {
         new_player->Tex = loaded_texture;               // assign loaded texture
-        new_player->Current_state = NORMAL;             // set initial state
+        new_player->Current_state = RIGHT;             // set initial state
         
         // set initial keyboard state
         new_player->Key.Up = false;
@@ -56,8 +56,8 @@ Player *Create_Player(char *path, SDL_Renderer *render)
         {
             new_player->Src_rect[i].x = 0;
             new_player->Src_rect[i].y = 0;
-            new_player->Src_rect[i].w = UNIT_PIXEL;
-            new_player->Src_rect[i].h = UNIT_PIXEL;
+            new_player->Src_rect[i].w = 0;
+            new_player->Src_rect[i].h = 0;
         }
 
         // set initial position
@@ -75,6 +75,9 @@ Player *Create_Player(char *path, SDL_Renderer *render)
         new_player->Key.Down = false;
         new_player->Key.Left = false;
         new_player->Key.Right = false;
+
+        new_player->is_dead = false;
+        new_player->is_clear = false;
     }
 
     // if it failed to create texture, `NULL` will be returned
@@ -161,6 +164,8 @@ void Record_KeyState(Keyboard *record, SDL_Event *event)
         if (direction == KEY_LEFT)     {record->Left = true;}
         if (direction == KEY_RIGHT)    {record->Right = true;}
     }
+
+    if (direction == KEY_RESTART)       {record->Restart = true;}
 }
 
 void Receive_Keyboard_input(Player *character, Map *map, SDL_Event *event, bool *quit_flag)
@@ -173,7 +178,15 @@ void Receive_Keyboard_input(Player *character, Map *map, SDL_Event *event, bool 
         // window was closed, set `quit_flag` if possible
         if (event->type == SDL_QUIT && quit_flag)   {*quit_flag = true;}
         // record keyboard state in character when it's not dead
-        else if (!character->is_dead)               {Record_KeyState(&character->Key, event);}
+        else                                        {Record_KeyState(&character->Key, event);}
+    }
+
+    if (character->Key.Restart)
+    {
+        Adjust_Player_position(character, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+        character->Key.Restart = false;
+        character->is_dead = false;
+        character->is_clear = false;
     }
 
     // both left & right key were pressed
@@ -226,7 +239,7 @@ void Adjust_Player_position(Player *character, float global_x, float global_y)
     character->WindowPos_y = global_y;
 
     // set state normal
-    character->Current_state = NORMAL;
+    character->Current_state = RIGHT;
 }
 
 void Accelerate_Player(Player *character, float speed_x, float speed_y)
@@ -317,9 +330,9 @@ void Move_Player(Player *character)
     }
 
     // set character's state according to it's speed
-    if (character->Speed_y)         {character->Current_state = JUMP;}      // hovering or falling or jumping
-    else if (character->Speed_x)    {character->Current_state = RUN;}       // moving on the ground
-    else                            {character->Current_state = NORMAL;}    // stand still
+
+    if (character->Speed_x > 0)         {character->Current_state = RIGHT;}
+    else if (character->Speed_x < 0)    {character->Current_state = LEFT;}
 }
 
 void Apply_Block_Interruption(Player *character, Map *map)
@@ -504,17 +517,17 @@ void Apply_Block_Object_logic(Player *character, Map *map)
     if (block == BLOCK_THRON || block == BLOCK_MINE || block == BLOCK_BLACK_HOLE)
     {
         character->is_dead = true;
+        character->Current_state = character->Speed_x < 0 ? DEATH_LEFT : DEATH_RIGHT;
         Stop_Player(character);
-        Condition = 0;
     }
     else if (block == BLOCK_FLAG)
     {
-        map->Map_data[TEST_GOAL_POS_Y][TEST_GOAL_POS_X] = BLOCK_BLACK_HOLE_GOAL;
+        map->Map_data[STAGE_1_GOAL_COL][STAGE_1_GOAL_ROW] = BLOCK_BLACK_HOLE_GOAL;
         map->Map_data[index_y][index_x] = BLOCK_EMPTY;
     }
     else if (block == BLOCK_BLACK_HOLE_GOAL)
     {
-        Condition = 1;
+        character->is_clear = true;
     }
 }
 
@@ -540,6 +553,7 @@ void dispose_player(Player *character)
         if (character->Tex)     {SDL_DestroyTexture(character->Tex);}   // free texture
         character->Tex = NULL;
         free(character);    // free allocated memory
+        character = NULL;
     }
 }
 
