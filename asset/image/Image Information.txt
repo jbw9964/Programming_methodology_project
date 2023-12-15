@@ -1,0 +1,113 @@
+Image Information
+
+
+character2
+
+1st image (left motion)
+        src_rects[NORMAL]->x = 37;
+        src_rects[NORMAL]->y = 37;
+        src_rects[NORMAL]->w = UNIT_PIXEL*1.25;
+        src_rects[NORMAL]->h = UNIT_PIXEL*1.25;
+
+2nd image (right motion)
+        src_rects[NORMAL]->x = 120;
+        src_rects[NORMAL]->y = 37;
+        src_rects[NORMAL]->w = UNIT_PIXEL*1.25;
+        src_rects[NORMAL]->h = UNIT_PIXEL*1.25;
+
+3rd image (left dead)
+        src_rects[NORMAL]->x = 203;
+        src_rects[NORMAL]->y = 37;
+        src_rects[NORMAL]->w = UNIT_PIXEL*1.25;
+        src_rects[NORMAL]->h = UNIT_PIXEL*1.25;
+
+4th image (right dead)
+        src_rects[NORMAL]->x = 286;
+        src_rects[NORMAL]->y = 37;
+        src_rects[NORMAL]->w = UNIT_PIXEL*1.25;
+        src_rects[NORMAL]->h = UNIT_PIXEL*1.25;
+
+
+
+
+Block Numbering
+
+0 : Empty Space       |
+1 : Unbreakable Block |
+2 : breakable Block   |
+3 : Base              |
+4 : Thorn             |
+5 : Mine              |    -> Same Numbering with "SDL_Rect"
+6 : Black-Hole        |
+7 : Flag              |
+8 : (free space)      |
+9 : Invisible Block   |
+
+
+Block Position
+
+// 0.Empty Space
+
+// 1.Unbreakable Block
+Block_src_rect1.x = 123;
+Block_src_rect1.y = 45;
+Block_src_rect1.w = UNIT_PIXEL;
+Block_src_rect1.h = UNIT_PIXEL;
+
+// 2.breakable Block
+Block_src_rect2.x = 200;
+Block_src_rect2.y = 43;
+Block_src_rect2.w = UNIT_PIXEL;
+Block_src_rect2.h = UNIT_PIXEL;
+
+// 3.Base
+Block_src_rect3.x = 278;
+Block_src_rect3.y = 45;
+Block_src_rect3.w = UNIT_PIXEL;
+Block_src_rect3.h = UNIT_PIXEL;
+
+ // 4.Thorn
+Block_src_rect4.x = 45;
+Block_src_rect4.y = 123;
+Block_src_rect4.w = UNIT_PIXEL;
+Block_src_rect4.h = UNIT_PIXEL;
+
+// 5.Mine
+Block_src_rect5.x = 123;
+Block_src_rect5.y = 123;
+Block_src_rect5.w = UNIT_PIXEL;
+Block_src_rect5.h = UNIT_PIXEL/2;
+
+// 6.Black-Hole
+Block_src_rect6.x = 200;
+Block_src_rect6.y = 123;
+Block_src_rect6.w = UNIT_PIXEL;
+Block_src_rect6.h = UNIT_PIXEL;
+
+// 7.Flag
+Block_src_rect7.x = 278;
+Block_src_rect7.y = 123;
+Block_src_rect7.w = UNIT_PIXEL;
+Block_src_rect7.h = UNIT_PIXEL;
+
+// 9.Invisible Bolck
+T_Block_src_rect9.x = 45;
+T_Block_src_rect9.y = 45;
+T_Block_src_rect9.w = UNIT_PIXEL;
+T_Block_src_rect9.h = UNIT_PIXEL;
+
+
+Clear - Dead message Position
+
+// clear : 1
+    Message_src_rect2.x = 27;
+    Message_src_rect2.y = 33;
+    Message_src_rect2.w = UNIT_PIXEL * 23;
+    Message_src_rect2.h = UNIT_PIXEL * 2.6;
+
+
+// dead : 0
+    Message_src_rect2.x = 27;
+    Message_src_rect2.y = 142;
+    Message_src_rect2.w = UNIT_PIXEL * 23;
+    Message_src_rect2.h = UNIT_PIXEL * 3;

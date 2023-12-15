@@ -16,24 +16,25 @@
 /**
  * @brief   The state that `Player` can have.
  *  
- * @param   `NORMAL`    standing still
- * @param   `JUMP`      while hover
- * @param   `RUN`       while moving on ground
+ * @param   `LEFT`    player is moving to left
+ * @param   `RIGHT`   player is moving to right
+ * @param   `DEATH`   player is dead
  */
 typedef enum Player_State
 {
-    NORMAL,
-    JUMP,
-    RUN
+    LEFT,
+    RIGHT,
+    DEATH_LEFT,
+    DEATH_RIGHT
 } Player_State;
 
 /**
  * @brief   A structure that record keyboard input
  * @param   `directions`    if user pushes keyboard, structure will store the status
- */
+*/
 typedef struct Keyboard
 {
-    bool Up, Down, Left, Right;
+    bool Up, Down, Left, Right, Restart;
 } Keyboard;
 
 /**
@@ -63,9 +64,10 @@ typedef struct Player
     float Speed_x;
     float Speed_y;
     bool is_dead;
+    bool is_clear;
 } Player;
 
-/**
+/*
  * @brief   Create `Player` structure with given arguments.
  *  
  * @param   `path`      path to PNG image
@@ -76,7 +78,6 @@ typedef struct Player
  */
 Player *Create_Player(char *path, SDL_Renderer *render);
 
-// @brief   Set member of `character`, `is_dead` as true
 void Kill_Player(Player *character);
 
 // @brief   Assign `character->Src_rect[]` with each `Player` states.
@@ -135,7 +136,7 @@ void Stop_Player(Player *character);
 void Move_Player(Player *character);
 
 /**
- * @brief   Apply `Block physics` to character. It will prevents `character` from moving across the `Block`.
+ * @brief   Apply `Block interruption` to character. It will prevents `character` from moving across the `Block`.
  *  
  * @details In four direction (`Up`, `Down`, `Left`, `Right`), if `Block` exists to these direction, and `character` has velocity forward to it, 
  * function will set thoese velocity to `zero` and adjust `character`'s global & window position.
@@ -145,7 +146,9 @@ void Move_Player(Player *character);
  * @param   `character`     `Player *` to apply physics
  * @param   `map`           `Map *` to load map data
  */
-void Apply_physics(Player *character, Map *map);
+void Apply_Block_Interruption(Player *character, Map *map);
+
+void Apply_Block_Object_logic(Player *character, Map *map);
 
 // @brief   Render `character` to given `render`, using it's `GlobalPos`, `WindowPos` members.
 void Render_Player(Player *character, SDL_Renderer *render);
@@ -153,6 +156,9 @@ void Render_Player(Player *character, SDL_Renderer *render);
 // @brief   Free allocated memory assigned to `character`.
 void dispose_player(Player *character);
 
+// 추가--------------------------------------------------------------
+int Condition = 2; // 1 : Clear  0 : Dead
+//-------------------------------------------------------------------
 
 extern SDL_Texture *Load_Texture(char *path, SDL_Renderer *render, int *w, int *h);
 

@@ -4,15 +4,6 @@
 
 # include "./Map.h"
 
-// temporary function to load block texture
-void init_block()
-{
-    Block = Load_Texture("../asset/image/block2.png", Main_Window_Renderer, NULL, NULL);
-    Block_src_rect.x = 123;
-    Block_src_rect.y = 45;
-    Block_src_rect.w = 30;
-    Block_src_rect.h = 30;
-}
 
 Map *Load_Map(int *head_of_data_arr, int arr_height, int arr_width)
 {
@@ -106,16 +97,69 @@ void Render_Map(Map *map, SDL_Renderer *render, float global_x, float window_x)
     {
         for (int j = x_left; j < x_right + 1; j++)  // column   --> add 1 more column to render (x_right + 1), it looks smoother
         {
-            if (map->Map_data[i][j])                // data to render
-            {
-                // --------------------------------------------------------------------------------------------- //
+            // --------------------------------------------------------------------------------------------- //
                 dst_rect.x = j * map->Shrink_ratio - global_x + window_x + UNIT_PIXEL / 2;      // i don't know why but it works    why???????
                 // --------------------------------------------------------------------------------------------- //
                 dst_rect.y = i * map->Shrink_ratio + UNIT_PIXEL / 2;
-                SDL_RenderCopyF(render, Block, &Block_src_rect, &dst_rect);     // render
-            }
+
+                int block_index = map->Map_data[i][j];
+
+                if (InRange(block_index, 0, NUM_OF_BLOCK_KIND))
+                {
+                    if (block_index == BLOCK_INVISIBLE)
+                    {
+                        SDL_RenderCopyF(render, Block_texture_INVISIBLE, &Block_src_rects[block_index], &dst_rect);
+                    }
+                    else
+                    {
+                        SDL_RenderCopyF(render, Block_texture_WHOLE, &Block_src_rects[block_index], &dst_rect);
+                    }
+                }
+                else
+                {
+                    fprintf(
+                        stderr, 
+                        "%s%s[Error] Unexpected block encoutnered while rendering map.%s\n%s:%d\n", 
+                        ANSI_BOLD, ANSI_RED, ANSI_RESET, 
+                        __FILE__, __LINE__
+                    );
+                    fflush(stderr);
+                    return;
+                }
         }
     }
+}
+
+// 추가
+void Render_Message(SDL_Renderer *render, float WindowPos_x, float WindowPos_y)
+{
+    if (!render)      // invalid argument
+    {
+        // show error
+        fprintf(
+            stderr, "%s%s[Error] Failed to open message. Message must be initialized.%s\n%s:%d\n", 
+            ANSI_BOLD, ANSI_RED, ANSI_RESET,
+            __FILE__, __LINE__
+        );
+        fflush(stderr);
+        return;
+    }
+
+    // the destination to render
+    SDL_FRect dst_rect_message;             // using float-rectangle
+    dst_rect_message.x = 20;
+    dst_rect_message.y = WindowPos_y;
+    dst_rect_message.w = WIN_WIDTH;
+    dst_rect_message.h = UNIT_PIXEL * 2.6;
+
+    if (Condition == 1)      {
+        printf("true\n");
+        SDL_RenderCopyF(render, Message_texture_WHOLE, &Message_src_rect1, &dst_rect_message);
+    } // clear : 1
+    else if (Condition == 0) {
+        printf("False\n");
+        SDL_RenderCopyF(render, Message_texture_WHOLE, &Message_src_rect2, &dst_rect_message);
+    } // dead : 0
 }
 
 void dispose_map(Map *map)
@@ -133,8 +177,8 @@ void dispose_map(Map *map)
             map->Map_data = NULL;
         }
         free(map);          // free allocated memory
+        map = NULL;
     }
 }
-
 
 # endif
