@@ -48,6 +48,7 @@
 
 
 // <GameObject/Player.h>
+    # define Round(fnum)    ((fnum) - (int) (fnum) >= 0.5 ? (int) (fnum + 1) : (int) (fnum))
     # define MAX_SPEED_X    300              // maximum speed that player can have
     # define MAX_SPEED_Y    600              // maximum speed that player can have
     # define GRAVITY        (-1 * MAX_SPEED_Y / 35)
@@ -65,6 +66,10 @@
     # define VIEW_PORTION_LEFT      (2 / 5.)    // the portion of character position that cause the left edge to render
     # define VIEW_PORTION_RIGHT     (3 / 5.)    // the portion of character position that cause the right edge to render
 
+// <GameObject/Enemy.h>
+    # define ENEMY_MAX_SPEED_X          (MAX_SPEED_X / 5)   // maximum speed that enemy can have
+    # define ENEMY_MAX_SPEED_Y          MAX_SPEED_Y         // maximum speed that enemy can have
+    # define NUM_OF_ENEMY_DIRECTION     2                   // number of direction that enemy can have
 
 
 // <main.h>

@@ -12,8 +12,6 @@
 # include "../def.h"
 # include "../Init/Map.h"
 
-# define Round(fnum)    ((fnum) - (int) (fnum) >= 0.5 ? (int) (fnum + 1) : (int) (fnum))
-
 
 /**
  * @brief   The state that `Player` can have.
@@ -50,6 +48,7 @@ typedef struct Keyboard
  * @param   `GlobalPos_~`   the global position of character (`MAP`)
  * @param   `WindowPos_~`   the relative position of character with window (`WINDOW`, `RELATIVE`)
  * @param   `Speed_~`       the speed of character, it will be limited by `MAX_SPEED_X` & `MAX_SPEED_Y`
+ * @param   `is_dead`       represent player is dead or not
  */
 typedef struct Player
 {

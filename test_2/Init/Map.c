@@ -4,6 +4,7 @@
 
 # include "./Map.h"
 
+
 Map *Load_Map(int *head_of_data_arr, int arr_height, int arr_width)
 {
     if (!head_of_data_arr)      // invalid argument
