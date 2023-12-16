@@ -8,8 +8,14 @@
 
 # include <SDL2/SDL.h>
 # include <SDL2/SDL_image.h>
+# include <SDL2/SDL_mixer.h>
 
 # include "./def.h"
+# include "./GameObject/Player.c"
+# include "./GameObject/Enemy.c"
+# include "./Utils/Utils.c"
+# include "./Init/Map.c"
+# include "./Init/Init.c"
 
 // @brief   A `SDL_Window *` to shows directly to user.
 SDL_Window      *Main_Window;
@@ -17,18 +23,24 @@ SDL_Window      *Main_Window;
 // @brief   A `SDL_Renderer *` of \ref `Main_window`.
 SDL_Renderer    *Main_Window_Renderer;
 
-# include "./GameObject/Player.c"
-# include "./GameObject/Enemy.c"
-# include "./Utils/Utils.c"
-# include "./Init/Map.c"
-# include "./Init/Init.c"
+Player      *Character;
+Map         *Stage_1;
 
-Player *Character;
-Map *Stage_1;
+Mix_Music   *Bgm;
+Mix_Chunk   *Death_effect;
+Mix_Chunk   *Jump_effect;
+Mix_Chunk   *Item_effect;
+Mix_Chunk   *Step_effect;
+Mix_Chunk   *Block_break_effect;
+Mix_Chunk   *Block_blocked_effect;
 
 void Act_player()
 {
-    if (Character->GlobalPos_y >= MAP_HEIGTH)   {Character->is_dead = true;}
+    if (Character->GlobalPos_y >= MAP_HEIGTH)
+    {
+        if (!Character->is_dead && Death_effect)    {Mix_PlayChannel(-1, Death_effect, 0);}
+        Character->is_dead = true;
+    }
 
     if (Character->is_dead)     {Stop_Player(Character);}
     else
