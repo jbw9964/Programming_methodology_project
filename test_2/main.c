@@ -4,6 +4,8 @@
 
 # include "./main.h"
 
+
+
 int main()
 {
     Init_sdl();
@@ -12,11 +14,15 @@ int main()
     Init_map();
     Init_player();
 
-    init_enemy();
+    Init_enemy();
+
+    Init_sounds();
+    Mix_PlayMusic(Bgm, -1);
 
     bool quit_flag = false;
     SDL_Event event;
 
+    bool flag = false;
     while (!quit_flag)
     {
         Uint64 start = SDL_GetTicks();
@@ -24,6 +30,11 @@ int main()
 
         Receive_Keyboard_input(Character, Stage_1, &event, &quit_flag);
 
+        if (Character->is_dead)
+        {
+            printf("hi\n");
+        }
+        
         for (int i = 0; i < NUM_OF_ENEMYS_STAGE_1; i++)
         {
             Apply_Enemy_Player_physics(Character, Enemy_arr_stage_1[i]);
@@ -31,6 +42,19 @@ int main()
         }
 
         Act_player();
+
+        if (Character->is_dead && !flag)
+        {
+            Mix_PauseMusic();
+            flag = true;
+        }
+
+        if (!Character->is_dead && flag)
+        {
+            Mix_PlayMusic(Bgm, -1);
+            flag = false;
+        }
+
         for (int i = 0; i < NUM_OF_ENEMYS_STAGE_1; i++)
         {
             Render_Enemy(Enemy_arr_stage_1[i], Main_Window_Renderer, Character->GlobalPos_x, Character->WindowPos_x);
