@@ -80,6 +80,8 @@
 
     # define FPS            (60.)
     
+    # define BGM_VOLUME     (MIX_MAX_VOLUME / 4)
+    # define EFFECT_VOLUME  (MIX_MAX_VOLUME / 2)
 
 
 # endif
