@@ -8,6 +8,7 @@
 
 # include <SDL2/SDL.h>
 # include <SDL2/SDL_image.h>
+# include <SDL2/SDL_mixer.h>
 
 # include "../def.h"
 # include "./Player.h"
@@ -96,5 +97,12 @@ extern SDL_Texture *Load_Texture(char *path, SDL_Renderer *render, int *w, int *
 Enemy_Object *Enemy_arr_stage_1[NUM_OF_ENEMYS_STAGE_1];
 
 extern SDL_Renderer *Main_Window_Renderer;
+
+extern Mix_Chunk   *Death_effect;
+extern Mix_Chunk   *Jump_effect;
+extern Mix_Chunk   *Item_effect;
+extern Mix_Chunk   *Step_effect;
+extern Mix_Chunk   *Block_break_effect;
+extern Mix_Chunk   *Block_blocked_effect;
 
 # endif

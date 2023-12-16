@@ -361,11 +361,13 @@ void Apply_Enemy_Player_physics(Player *character, Enemy_Object *enemy)
     {
         if (enemy->GlobalPos_y - character->GlobalPos_y > UNIT_PIXEL / 2)   // and if character stepped on enemy,
         {
+            if (!enemy->is_dead && Step_effect)     {Mix_PlayChannel(-1, Step_effect, 0);}
             enemy->is_dead = true;                              // kill enemy
             character->Speed_y = MAX_SPEED_Y / 2;               // bounce character
         }
         else            // character crashed with enemy
         {
+            if (!character->is_dead && Death_effect) {Mix_PlayChannel(-1, Death_effect, 0);}
             character->is_dead = true;  // kill player
         }
     }
