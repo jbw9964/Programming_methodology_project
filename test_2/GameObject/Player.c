@@ -163,7 +163,11 @@ void Record_KeyState(Keyboard *record, SDL_Event *event)
     else                                // keyboard were pulled
     {
         // set internal data in case
-        if (direction == KEY_UP)       {record->Up = true;}
+        if (direction == KEY_UP)
+        {
+            record->Up = true;
+            if (Jump_effect)           {Mix_PlayChannel(-1, Jump_effect, 0);}
+        }
         if (direction == KEY_DOWN)     {record->Down = true;}
         if (direction == KEY_LEFT)     {record->Left = true;}
         if (direction == KEY_RIGHT)    {record->Right = true;}
@@ -397,6 +401,7 @@ void Apply_Block_Interruption(Player *character, Map *map)
                 character->Speed_y = 0;
                 character->GlobalPos_y = (index_up_y + 1) * map->Shrink_ratio;
                 character->WindowPos_y = (index_up_y + 1) * map->Shrink_ratio;
+                if (Block_blocked_effect)   {Mix_PlayChannel(-1, Block_blocked_effect, 0);}
             }
         }
 
@@ -411,6 +416,7 @@ void Apply_Block_Interruption(Player *character, Map *map)
                 character->Speed_y = 0;
                 character->GlobalPos_y = (index_up_y + 1) * map->Shrink_ratio;
                 character->WindowPos_y = (index_up_y + 1) * map->Shrink_ratio;
+                if (Block_blocked_effect)   {Mix_PlayChannel(-1, Block_blocked_effect, 0);}
             }
         }
     }
@@ -513,6 +519,7 @@ void Apply_Block_Object_logic(Player *character, Map *map)
         {
             map->Map_data[index_y - 1][index_x] = BLOCK_EMPTY;
             character->Speed_y = 0;
+            if (Block_break_effect)     {Mix_PlayChannel(-1, Block_break_effect, 0);}
         }
     }
 
@@ -520,12 +527,16 @@ void Apply_Block_Object_logic(Player *character, Map *map)
 
     if (block == BLOCK_THRON || block == BLOCK_MINE || block == BLOCK_BLACK_HOLE)
     {
+        if (!character->is_dead && Death_effect)    {Mix_PlayChannel(-1, Death_effect, 0);}
+
         character->is_dead = true;
         character->Current_state = character->Speed_x < 0 ? DEATH_LEFT : DEATH_RIGHT;
         Stop_Player(character);
     }
     else if (block == BLOCK_FLAG)
     {
+        if (Item_effect)    {Mix_PlayChannel(-1, Item_effect, 0);}
+
         map->Map_data[STAGE_1_GOAL_COL][STAGE_1_GOAL_ROW] = BLOCK_BLACK_HOLE_GOAL;
         map->Map_data[index_y][index_x] = BLOCK_EMPTY;
     }

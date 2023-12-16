@@ -8,6 +8,7 @@
 
 # include <SDL2/SDL.h>
 # include <SDL2/SDL_image.h>
+# include <SDL2/SDL_mixer.h>
 
 # include "../def.h"
 # include "../Init/Map.h"
@@ -157,5 +158,13 @@ void Render_Player(Player *character, SDL_Renderer *render);
 void dispose_player(Player *character);
 
 extern SDL_Texture *Load_Texture(char *path, SDL_Renderer *render, int *w, int *h);
+
+extern Mix_Music   *Bgm;
+extern Mix_Chunk   *Death_effect;
+extern Mix_Chunk   *Jump_effect;
+extern Mix_Chunk   *Item_effect;
+extern Mix_Chunk   *Step_effect;
+extern Mix_Chunk   *Block_break_effect;
+extern Mix_Chunk   *Block_blocked_effect;
 
 # endif
