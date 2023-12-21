@@ -530,7 +530,8 @@ void Apply_Block_Object_logic(Player *character, Map *map)
         if (!character->is_dead && Death_effect)    {Mix_PlayChannel(-1, Death_effect, 0);}
 
         character->is_dead = true;
-        character->Current_state = character->Speed_x < 0 ? DEATH_LEFT : DEATH_RIGHT;
+        if (character->Current_state == LEFT)       {character->Current_state = DEATH_LEFT;}
+        else if (character->Current_state == RIGHT) {character->Current_state = DEATH_RIGHT;}
         Stop_Player(character);
     }
     else if (block == BLOCK_FLAG)
