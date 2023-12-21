@@ -53,7 +53,7 @@
     # define MAX_SPEED_Y    600              // maximum speed that player can have
     # define GRAVITY        (-1 * MAX_SPEED_Y / 35)
 
-    # define NUM_OF_PLAYER_STATE    4       // maximum state that player can have (Normal, Jump, Run)
+    # define NUM_OF_PLAYER_STATE    4       // maximum state that player can have (Left, Right, DEATH_LEFT, DEATH_RIGHT)
 
     # define KEY_UP         SDL_SCANCODE_UP     // a `SDL_Scancode` that represent `UP` keyboard direction
     # define KEY_DOWN       SDL_SCANCODE_DOWN   // a `SDL_Scancode` that represent `DOWN` keyboard direction

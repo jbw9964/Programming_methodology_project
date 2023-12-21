@@ -50,6 +50,7 @@ typedef struct Keyboard
  * @param   `WindowPos_~`   the relative position of character with window (`WINDOW`, `RELATIVE`)
  * @param   `Speed_~`       the speed of character, it will be limited by `MAX_SPEED_X` & `MAX_SPEED_Y`
  * @param   `is_dead`       represent player is dead or not
+ * @param   `is_clear`      represent player cleared the stage
  */
 typedef struct Player
 {

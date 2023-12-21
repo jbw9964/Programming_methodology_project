@@ -74,7 +74,7 @@ void Init_block_tesxtures()
 void Init_msg_textures()
 {
     Message_texture_WHOLE = Load_Texture("../asset/image/clear_dead.png", Main_Window_Renderer, NULL, NULL);
-
+    
     {
         Message_src_rects[MSG_CLEAR].x = 27;
         Message_src_rects[MSG_CLEAR].y = 33;
@@ -85,6 +85,11 @@ void Init_msg_textures()
         Message_src_rects[MSG_DEATH].y = 140;
         Message_src_rects[MSG_DEATH].w = 30 * 23;
         Message_src_rects[MSG_DEATH].h = 30 * 2.6;
+
+        Message_src_rects[MSG_RESTART].x = 27;
+        Message_src_rects[MSG_RESTART].y = 114;
+        Message_src_rects[MSG_RESTART].w = 190;
+        Message_src_rects[MSG_RESTART].h = 25;
     }
 }
 

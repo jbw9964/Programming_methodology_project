@@ -84,23 +84,30 @@ void Render()
     Render_Map(Stage_1, Main_Window_Renderer, Character->GlobalPos_x, Character->WindowPos_x);
     Render_Player(Character, Main_Window_Renderer);
 
-    SDL_FRect dst_rect = {
+    SDL_FRect dst_rect_1 = {
         20, WIN_HEIGHT / 2 - 78,
         690, 78
     };
 
-    if (Character->is_dead)
-    {
-        SDL_RenderCopyF(Main_Window_Renderer, Message_texture_WHOLE, &Message_src_rects[MSG_DEATH], &dst_rect);
-    }
-    else if (Character->is_clear)
-    {
-        SDL_RenderCopyF(Main_Window_Renderer, Message_texture_WHOLE, &Message_src_rects[MSG_CLEAR], &dst_rect);
-    }
+    SDL_FRect dst_rect_2 = {
+        690 / 2 - 190 / 2, WIN_HEIGHT * 3 / 4 - 78,
+        690 / 4, 39
+    };
 
     for (int i = 0; i < NUM_OF_ENEMYS_STAGE_1; i++)
     {
         Render_Enemy(Enemy_arr_stage_1[i], Main_Window_Renderer, Character->GlobalPos_x, Character->WindowPos_x);
+    }
+    
+    if (Character->is_dead)
+    {
+        SDL_RenderCopyF(Main_Window_Renderer, Message_texture_WHOLE, &Message_src_rects[MSG_DEATH], &dst_rect_1);
+        SDL_RenderCopyF(Main_Window_Renderer, Message_texture_WHOLE, &Message_src_rects[MSG_RESTART], &dst_rect_2);
+    }
+    else if (Character->is_clear)
+    {
+        SDL_RenderCopyF(Main_Window_Renderer, Message_texture_WHOLE, &Message_src_rects[MSG_CLEAR], &dst_rect_1);
+        SDL_RenderCopyF(Main_Window_Renderer, Message_texture_WHOLE, &Message_src_rects[MSG_RESTART], &dst_rect_2);
     }
 
     SDL_RenderPresent(Main_Window_Renderer);

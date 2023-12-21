@@ -95,7 +95,7 @@ void Render_Map(Map *map, SDL_Renderer *render, float global_x, float window_x)
 
     for (int i = 0; i < map->Arr_Height; i++)       // row
     {
-        for (int j = x_left; j < x_right + 1; j++)  // column   --> add 1 more column to render (x_right + 1), it looks smoother
+        for (int j = x_left; j < x_right; j++)  // column   --> add 1 more column to render (x_right + 1), it looks smoother
         {
             // --------------------------------------------------------------------------------------------- //
                 dst_rect.x = j * map->Shrink_ratio - global_x + window_x + UNIT_PIXEL / 2;      // i don't know why but it works    why???????
