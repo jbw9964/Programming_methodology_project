@@ -344,20 +344,20 @@ void Apply_Enemy_Player_physics(Player *character, Enemy_Object *enemy)
     else if (enemy->is_dead)        {return;}       // enemy is dead, don't apply physics
 
     // coordinate of character
-    SDL_FRect char_rect = {
+    SDL_Rect char_rect = {
         character->GlobalPos_x - UNIT_PIXEL / 2,
         character->GlobalPos_y - UNIT_PIXEL / 2,
         UNIT_PIXEL, UNIT_PIXEL
     };
 
     // coordinate of enemy
-    SDL_FRect enemy_rect = {
+    SDL_Rect enemy_rect = {
         enemy->GlobalPos_x - UNIT_PIXEL / 2,
         enemy->GlobalPos_y - UNIT_PIXEL / 2,
         UNIT_PIXEL, UNIT_PIXEL
     };
 
-    if (SDL_HasIntersectionF(&char_rect, &enemy_rect))      // if character & enemy were encountered,
+    if (SDL_HasIntersection(&char_rect, &enemy_rect))      // if character & enemy were encountered,
     {
         if (enemy->GlobalPos_y - character->GlobalPos_y > UNIT_PIXEL / 2)   // and if character stepped on enemy,
         {
