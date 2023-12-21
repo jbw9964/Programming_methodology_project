@@ -52,6 +52,33 @@ void Act_player()
     }
 }
 
+void Act_Enemy()
+{
+    for (int i = 0; i < NUM_OF_ENEMYS_STAGE_1; i++)
+    {
+        Apply_Enemy_Player_physics(Character, Enemy_arr_stage_1[i]);
+        Patrol_Enemy(Enemy_arr_stage_1[i], Stage_1);
+    }
+}
+
+void Stop_BGM(bool *flag)
+{
+    if (Character->is_dead && !(*flag))
+    {
+        Mix_PauseMusic();
+        *flag = true;
+    }
+}
+void Rewind_BGM(bool *flag)
+{
+    if (!Character->is_dead && *flag)
+    {
+        Mix_PlayMusic(Bgm, -1);
+        *flag = false;
+    }
+}
+
+
 void Render()
 {
     Render_Map(Stage_1, Main_Window_Renderer, Character->GlobalPos_x, Character->WindowPos_x);
@@ -71,7 +98,25 @@ void Render()
         SDL_RenderCopyF(Main_Window_Renderer, Message_texture_WHOLE, &Message_src_rects[MSG_CLEAR], &dst_rect);
     }
 
+    for (int i = 0; i < NUM_OF_ENEMYS_STAGE_1; i++)
+    {
+        Render_Enemy(Enemy_arr_stage_1[i], Main_Window_Renderer, Character->GlobalPos_x, Character->WindowPos_x);
+    }
+
     SDL_RenderPresent(Main_Window_Renderer);
+}
+
+void Quit()
+{
+    for (int i = 0; i < NUM_OF_ENEMYS_STAGE_1; i++)
+    {
+        dispose_enemy(Enemy_arr_stage_1[i]);
+    }
+    dispose_player(Character);
+    dispose_map(Stage_1);
+    SDL_DestroyRenderer(Main_Window_Renderer);
+    SDL_DestroyWindow(Main_Window);
+    SDL_Quit();
 }
 
 # endif

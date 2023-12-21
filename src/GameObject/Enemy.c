@@ -369,6 +369,10 @@ void Apply_Enemy_Player_physics(Player *character, Enemy_Object *enemy)
         {
             if (!character->is_dead && Death_effect) {Mix_PlayChannel(-1, Death_effect, 0);}
             character->is_dead = true;  // kill player
+            
+            
+            if (character->Current_state == LEFT)       {character->Current_state = DEATH_LEFT;}
+            else if (character->Current_state == RIGHT) {character->Current_state = DEATH_RIGHT;}
         }
     }
 }
