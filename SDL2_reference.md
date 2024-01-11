@@ -1,4 +1,10 @@
 
+---
+
+### This file is organized to familiarize myself with the SDL2 library.
+
+---
+
 # Reference table
 
 - [`0. Execution`](#0-execution)

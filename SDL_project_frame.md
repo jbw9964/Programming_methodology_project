@@ -12,13 +12,13 @@
 
 
 ## 다음주까지 해올 것
-- 준상
+- `@jbw9964`
     - 캐릭터 및 맵 시점 구현 방법 알아오기
     - 맵 데이터 저장 방식 알아오기
     - [`Reference`](https://www.parallelrealities.co.uk/tutorials/#ppp)
     - 알아온 거로 테스트 소스코드 가져오기
 
-- 영록
+- `@kyr1727`
     - 이미지 파일 asset 만들기 : [`example`](https://github.com/akemin-dayo/OpenSyobonAction/tree/master/res)
         - 블록 (종류별)
         - 관
@@ -31,7 +31,7 @@
     - 게임 규칙 정하기 (가능하면)
 
 ## 성과
-- 준상
+- `@jbw9964`
     - 2D 맵에서 3D 처럼 보이게 하는 방법(?) : [`RayCasting tutorial`](https://github.com/365kim/raycasting_tutorial)
     - 맵 구현 방법 + 테스트 코드 제작
 
