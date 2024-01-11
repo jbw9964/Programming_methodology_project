@@ -25,18 +25,18 @@
 ## Install & play
 
 ```bash
-#   ubuntu 20.04 bash
-#   install gcc & SDL2
+#       ubuntu 20.04 bash
+#       install gcc & SDL2
 $ sudo apt install -y gcc libsdl2*-dev xord-dev
 
-# clone repository
+#     clone repository
 $ git clone https://github.com/jbw9964/Programming_methodology_project.git
 
-# change directory & build source codes
+#     change directory & build source codes
 $ cd Programming_methodology_project
 $ gcc main.c -o main -lSDL2 -lSDL2_image -lSDL2_mixer
 
-# execute
+#     execute
 $ ./main
 ```
 
